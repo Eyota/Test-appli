@@ -33,7 +33,7 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
-        this.receivedEvent('deviceready');
+        //this.receivedEvent('deviceready');
 
         // TOTALITE CODE DE L'APPLICATION
 
@@ -51,12 +51,12 @@ var app = {
             alert('Volume  Up  Button  is  pressed!');
         }
 
-        
         $('#sendMsg').click(function(){
             //alert('bouh');
             //$(body).html
             window.location = "sendMessage.html";
         });
+
 
 
     },
