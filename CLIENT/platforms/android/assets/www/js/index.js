@@ -46,7 +46,7 @@
 // io.on('connect', function (socket){
 //     console.log("Start connection");
 //     contact_services.applicationOn(socket)
-    
+
 //     socket.on('disconnect', function(){
 //         console.log("Stop animation")
 //         contact_services.applicationOff(socket)
@@ -68,6 +68,9 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         //this.receivedEvent('deviceready');
+
+
+
 
         // TOTALITE CODE DE L'APPLICATION
 
@@ -101,9 +104,9 @@ var app = {
         $('#getContact').click(function(){
 
             var options = new ContactFindOptions();
-            //options.filter="Mathurin"; 
+            //options.filter="Mathurin";
             var fields = ["displayName", "name"];
-            
+
 
 
             function onSuccess(contacts) {
@@ -113,6 +116,20 @@ var app = {
                 //         "Family Name: "  + contacts[i].name.familyName      + "\n" +
                 //         "Given Name: "   + contacts[i].name.givenName);
                 // }
+                /*
+                $.ajax({
+                    type : "POST",
+                    url : "/api/user/contacts",
+                    datatype : "text",
+                    data : contacts.serialize(),
+                    success : function() {
+                       alert("ok!")
+                    },
+                    error : function() {
+                        alert("try again")
+                    }
+                });
+                */
                 window.location = "listContacts.html";
             };
 
@@ -125,46 +142,13 @@ var app = {
             // exp.get('/contacts', function (req, res) {
             //     res.render('list_contacts', {contacts_data: contacts});
             // });
-            
+
 
             });
 
         $('#getMap').click(function(){
+            window.location = "getMap.html";
 
-            getMapLocation();
-
-            
-            // document.addEventListener("online", onOnline, false);
-            // document.addEventListener("resume", onResume, false);
-            // loadMapsApi();
-
-            // function onOnline() {
-            //     loadMapsApi();
-            // }
-
-            // function onResume() {
-            //     loadMapsApi();
-            // }
-
-            // function loadMapsApi() {
-            //     // if (navigator.connection.type === Connection.NONE || (global.google !== undefined && global.google.maps)) {
-            //     //     return;
-            //     // }
-
-            //     //TODO: Add your own Google maps API key to the URL below.
-            //     $.getScript('https://maps.googleapis.com/maps/api/js?sensor=true&callback=onMapsApiLoaded&key=AIzaSyC6O0j1Cvo3VUU-ye0tnbe9QznskTeik08');
-            // }
-
-            // window.onMapsApiLoaded = function () {
-            //     // Maps API loaded and ready to be used.
-            //     var map = new google.maps.Map(document.getElementById("map"), {
-            //         zoom: 8,
-            //         center: new google.maps.LatLng(-34.397, 150.644)
-            //     });
-            // };
-
-
-            //window.location = "getMap.html";
         });
 
 
