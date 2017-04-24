@@ -105,10 +105,15 @@ var app = {
 
             var options = new ContactFindOptions();
             //options.filter="Mathurin";
+<<<<<<< HEAD
             options.hasPhoneNumber=true;
             options.multiple=true;
             options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
             var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+=======
+            //var fields = ["displayName", "name"];
+            var fields = ["phoneNumbers"];
+>>>>>>> b45b3aeb20c71e3170b5e3d81afad4a3da643ce2
 
 
 
@@ -132,6 +137,7 @@ var app = {
                     error: function() {
                         alert("try again")
                     }
+
                 });
 
                 window.location = "listContacts.html";
@@ -152,7 +158,9 @@ var app = {
 
         $('#getMap').click(function(){
 
-            getMapLocation();
+            //getMapLocation();
+            window.location = "getMap.html";
+            //google.maps.event.addDomListener(window, 'load', getMapLocation);
 
 
             // document.addEventListener("online", onOnline, false);

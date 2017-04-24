@@ -11,8 +11,8 @@ router.post('/user/contact/', service.setContactList);
 
 //router.get('/user/maps', maps.)
 
-router.get('/msg/:num', service.getMsgs);
-router.post('/msg/', service.createMsg);
+//router.get('/msg/:num', service.getMsgs);
+//router.post('/msg/', service.createMsg);
 
 
 module.exports = router;

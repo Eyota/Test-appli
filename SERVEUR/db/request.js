@@ -71,8 +71,9 @@ function setContactList(numEmet, contacts, callback){
 	})
 	.catch(function(error) {
 		callback(error, null)
+
 	})*/
-//}
+
 
 // Pour actualiser la localisation de l'utilisateur
 function setLocalisation(num, lat, long, callback){
