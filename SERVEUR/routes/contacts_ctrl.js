@@ -5,6 +5,7 @@ var maps = require('../services/maps');
 
 
 router.get('/user/contact/:num', service.getContactNum);
+router.post('/user/contacts', service.setContactList);
 router.put('/user/position/:num', service.updatePos);
 router.get('/user/contact/position/:num', service.getContactPos);
 
