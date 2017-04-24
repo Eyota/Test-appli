@@ -4,14 +4,14 @@ var app = express(); // creation du serveur
 var server = require('http').createServer(app);
 var bodyParser = require('body-parser')  // envoie des paramÃ¨tres en POST
 var io = require('socket.io')(server);
-var service = require('../services/contacts')
+var service = require('./services/contacts')
 
 var contact_router = require('./routes/contacts_ctrl');
 var contact_services = require('./services/contacts');
 
 /*app.use(bodyParser.urlencoded({     // pour gÃ©rer les URL-encoded bodies (envoie formulaire en POST)
   extended: true
-}));*/ 
+}));*/
 
 //app.set('views', path.join( 'public/views'));
 //app.use(bodyParser.json) // permet de lire le json envoyÃ© en POST depuis le client
@@ -20,15 +20,15 @@ var contact_services = require('./services/contacts');
 app.use('/api/', contact_router);
 
 io.on('connection', function (socket) {
-  socket.emit('message', 'Vous êtes bien connecté !');
+  socket.emit('message', 'Vous ï¿½tes bien connectï¿½ !');
 });
 
 io.on('getMsg', function(num) {
-  
+
 });
 
 
- 
+
 // le repertoire public va contenir les
 // fichiers statiques
 //app.use(express.static('public'));

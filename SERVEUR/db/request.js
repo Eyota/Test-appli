@@ -45,12 +45,12 @@ function setContactList(numEmet, contacts, callback){
 					}
 				})
 				.then(function(data){
-					callback();
+					callback(data, error);
 				})
 		}
 	})
 	.then(function(data){
-		callback();
+		callback(data, error);
 	})
 	.catch(function(error) {
 		callback(error, null)
@@ -72,7 +72,7 @@ function setContactList(numEmet, contacts, callback){
 	.catch(function(error) {
 		callback(error, null)
 	})*/
-}
+//}
 
 // Pour actualiser la localisation de l'utilisateur
 function setLocalisation(num, lat, long, callback){

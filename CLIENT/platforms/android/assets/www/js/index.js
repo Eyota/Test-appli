@@ -46,7 +46,7 @@
 // io.on('connect', function (socket){
 //     console.log("Start connection");
 //     contact_services.applicationOn(socket)
-    
+
 //     socket.on('disconnect', function(){
 //         console.log("Stop animation")
 //         contact_services.applicationOff(socket)
@@ -68,6 +68,9 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         //this.receivedEvent('deviceready');
+
+
+
 
         // TOTALITE CODE DE L'APPLICATION
 
@@ -101,18 +104,36 @@ var app = {
         $('#getContact').click(function(){
 
             var options = new ContactFindOptions();
-            //options.filter="Mathurin"; 
-            var fields = ["displayName", "name"];
-            
+            //options.filter="Mathurin";
+            options.hasPhoneNumber=true;
+            options.multiple=true;
+            options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
+            var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+
 
 
             function onSuccess(contacts) {
                 alert('Found ' + contacts.length + ' contacts.');
+
                 // for (var i = 0; i < contacts.length; i++) {
                 //     alert("Formatted: "  + contacts[i].name.formatted       + "\n" +
                 //         "Family Name: "  + contacts[i].name.familyName      + "\n" +
                 //         "Given Name: "   + contacts[i].name.givenName);
                 // }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/user/contacts',
+                    data: {json: JSON.stringify({ name:"Bob"})},
+                    dataType: 'json',
+                    success: function() {
+                       alert("ok!")
+                    },
+                    error: function() {
+                        alert("try again")
+                    }
+                });
+
                 window.location = "listContacts.html";
             };
 
@@ -120,12 +141,12 @@ var app = {
                 alert('onError!');
             };
 
-            navigator.contacts.find(fields, onSuccess, onError);
+            navigator.contacts.find(fields, onSuccess, onError, options);
 
             // exp.get('/contacts', function (req, res) {
             //     res.render('list_contacts', {contacts_data: contacts});
             // });
-            
+
 
             });
 
@@ -133,7 +154,7 @@ var app = {
 
             getMapLocation();
 
-            
+
             // document.addEventListener("online", onOnline, false);
             // document.addEventListener("resume", onResume, false);
             // loadMapsApi();
