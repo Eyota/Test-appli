@@ -19,7 +19,7 @@ function applicationOn(socket){
         
         // on récupère les messages
         var res2 = getMsgs();
-        //socket.send(res2);// necessaire?
+        //socket.receive(res2);// necessaire?
 
         //on récupère les contacts présent autour de l'utilisateur
         var res3 = getContactPos();
