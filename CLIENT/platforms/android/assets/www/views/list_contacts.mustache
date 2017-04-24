@@ -1,0 +1,14 @@
+{{> head_app}}
+
+	<ul class="table-view">
+		<li class="table-view-cell table-view-cell">Liste contacts</li>
+
+		{{#contacts_data}}
+		<li class="table-view-cell">
+			{{contacts.name.formatted}}
+		</li>
+		{{#/contacts_data}}
+
+	</ul>
+
+{{> bottom_app}}

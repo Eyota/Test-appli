@@ -1,0 +1,25 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "fr.ensimag.TP_App_Mobile"
+        },
+        "cordova-plugin-contacts": {
+            "PACKAGE_NAME": "fr.ensimag.TP_App_Mobile"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "fr.ensimag.TP_App_Mobile"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "fr.ensimag.TP_App_Mobile"
+        }
+    }
+}
