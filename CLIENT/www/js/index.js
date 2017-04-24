@@ -131,7 +131,9 @@ var app = {
 
         $('#getMap').click(function(){
 
-            getMapLocation();
+            //getMapLocation();
+            window.location = "getMap.html";
+            //google.maps.event.addDomListener(window, 'load', getMapLocation);
 
             
             // document.addEventListener("online", onOnline, false);
