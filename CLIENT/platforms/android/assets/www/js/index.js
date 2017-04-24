@@ -53,6 +53,9 @@
 //     })
 // })
 
+//var map = require('../../services/maps.js');
+
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -67,6 +70,8 @@ var app = {
         //this.receivedEvent('deviceready');
 
         // TOTALITE CODE DE L'APPLICATION
+
+        //var socket = io.connect();
 
         $(document).bind("volumeupbutton", callbackFunction)
         $(document).bind("backbutton", onBackKeyDown)
@@ -126,35 +131,37 @@ var app = {
 
         $('#getMap').click(function(){
 
+            getMapLocation();
+
             
-            document.addEventListener("online", onOnline, false);
-            document.addEventListener("resume", onResume, false);
-            loadMapsApi();
+            // document.addEventListener("online", onOnline, false);
+            // document.addEventListener("resume", onResume, false);
+            // loadMapsApi();
 
-            function onOnline() {
-                loadMapsApi();
-            }
+            // function onOnline() {
+            //     loadMapsApi();
+            // }
 
-            function onResume() {
-                loadMapsApi();
-            }
+            // function onResume() {
+            //     loadMapsApi();
+            // }
 
-            function loadMapsApi() {
-                // if (navigator.connection.type === Connection.NONE || (global.google !== undefined && global.google.maps)) {
-                //     return;
-                // }
+            // function loadMapsApi() {
+            //     // if (navigator.connection.type === Connection.NONE || (global.google !== undefined && global.google.maps)) {
+            //     //     return;
+            //     // }
 
-                //TODO: Add your own Google maps API key to the URL below.
-                $.getScript('https://maps.googleapis.com/maps/api/js?sensor=true&callback=onMapsApiLoaded');
-            }
+            //     //TODO: Add your own Google maps API key to the URL below.
+            //     $.getScript('https://maps.googleapis.com/maps/api/js?sensor=true&callback=onMapsApiLoaded&key=AIzaSyC6O0j1Cvo3VUU-ye0tnbe9QznskTeik08');
+            // }
 
-            window.onMapsApiLoaded = function () {
-                // Maps API loaded and ready to be used.
-                var map = new google.maps.Map(document.getElementById("map"), {
-                    zoom: 8,
-                    center: new google.maps.LatLng(-34.397, 150.644)
-                });
-            };
+            // window.onMapsApiLoaded = function () {
+            //     // Maps API loaded and ready to be used.
+            //     var map = new google.maps.Map(document.getElementById("map"), {
+            //         zoom: 8,
+            //         center: new google.maps.LatLng(-34.397, 150.644)
+            //     });
+            // };
 
 
             //window.location = "getMap.html";
