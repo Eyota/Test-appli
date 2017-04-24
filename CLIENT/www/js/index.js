@@ -105,7 +105,8 @@ var app = {
 
             var options = new ContactFindOptions();
             //options.filter="Mathurin";
-            var fields = ["displayName", "name"];
+            //var fields = ["displayName", "name"];
+            var fields = ["phoneNumbers"];
 
 
 
@@ -116,20 +117,18 @@ var app = {
                 //         "Family Name: "  + contacts[i].name.familyName      + "\n" +
                 //         "Given Name: "   + contacts[i].name.givenName);
                 // }
-                /*
-                $.ajax({
+                /*$.ajax({
                     type : "POST",
                     url : "/api/user/contacts",
-                    datatype : "text",
-                    data : contacts.serialize(),
+                    data : contacts,
                     success : function() {
                        alert("ok!")
                     },
                     error : function() {
                         alert("try again")
                     }
-                });
-                */
+                });*/
+                alert(contacts);
                 window.location = "listContacts.html";
             };
 

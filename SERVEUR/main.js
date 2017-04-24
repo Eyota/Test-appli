@@ -4,7 +4,7 @@ var app = express(); // creation du serveur
 var server = require('http').createServer(app);
 var bodyParser = require('body-parser')  // envoie des paramètres en POST
 var io = require('socket.io')(server);
-var service = require('../services/contacts')
+var service = require('./services/contacts')
 
 var contact_router = require('./routes/contacts_ctrl');
 var contact_services = require('./services/contacts');
