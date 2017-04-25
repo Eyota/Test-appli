@@ -105,31 +105,41 @@ var app = {
 
             var options = new ContactFindOptions();
             //options.filter="Mathurin";
-            var fields = ["displayName", "name"];
+<<<<<<< HEAD
+            options.hasPhoneNumber=true;
+            options.multiple=true;
+            options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
+            var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+=======
+            //var fields = ["displayName", "name"];
+            var fields = ["phoneNumbers"];
+>>>>>>> b45b3aeb20c71e3170b5e3d81afad4a3da643ce2
 
 
 
             function onSuccess(contacts) {
                 alert('Found ' + contacts.length + ' contacts.');
+
                 // for (var i = 0; i < contacts.length; i++) {
                 //     alert("Formatted: "  + contacts[i].name.formatted       + "\n" +
                 //         "Family Name: "  + contacts[i].name.familyName      + "\n" +
                 //         "Given Name: "   + contacts[i].name.givenName);
                 // }
-                /*
+
                 $.ajax({
-                    type : "POST",
-                    url : "/api/user/contacts",
-                    datatype : "text",
-                    data : contacts.serialize(),
-                    success : function() {
+                    type: 'POST',
+                    url: '/api/user/contacts',
+                    data: {json: JSON.stringify(contacts)},
+                    dataType: 'json',
+                    success: function() {
                        alert("ok!")
                     },
-                    error : function() {
+                    error: function() {
                         alert("try again")
                     }
+
                 });
-                */
+
                 window.location = "listContacts.html";
             };
 
@@ -137,7 +147,7 @@ var app = {
                 alert('onError!');
             };
 
-            navigator.contacts.find(fields, onSuccess, onError);
+            navigator.contacts.find(fields, onSuccess, onError, options);
 
             // exp.get('/contacts', function (req, res) {
             //     res.render('list_contacts', {contacts_data: contacts});
