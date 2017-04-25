@@ -127,7 +127,6 @@ var app = {
 
             var options = new ContactFindOptions();
             //options.filter="Mathurin";
-
             options.hasPhoneNumber=true;
             options.multiple=true;
             options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
@@ -135,6 +134,7 @@ var app = {
 
             //var fields = ["displayName", "name"];
             //var fields = ["phoneNumbers"];
+
 
 
 
@@ -179,7 +179,6 @@ var app = {
 
         $('#getMap').click(function(){
             window.location = "getMap.html";
-
         });
 
 
