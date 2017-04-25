@@ -120,7 +120,7 @@ var app = {
 
         $('#getMsg').click(function(){
             window.location = "receivedMessages.html";
-            navigator.notification.beep(2);
+            navigator.notification.beep(1);
         });
 
         $('#getContact').click(function(){
