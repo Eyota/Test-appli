@@ -7,7 +7,7 @@ var db = pgb(dbconfig)
 
 //demande a la base de données si l'utilisateur au n°x a l'application
 function getUser(num,callback){
-  var requete = "select numTel from public.contacts where numTel = ${num}"
+  var requete = `select numTel, nom from public.utilisateurs where numTel=${num}`
   console.log(requete);
 
   db.any(requete, null)
@@ -24,19 +24,19 @@ function setContactList(numEmet, contacts, callback){
 
   var len=contacts.length
   for (i = 0; i < len; i++) {
-    var requete = "select numTel from public.contacts where numTel=${contacts[i]}"
+    var requete = `select numTel from public.utilisateurs where numTel=${contacts[i]}`
     console.log(requete);
     db.any(requete, null)
 	.then(function (data) {
 		//Si une ligne est retournée, le contact est utilisateur : il faut insérer le couple utilisateur/contact dans la table connaissance s'il n'y est pas encore
 		if(data != null){
-			var requete2 = "select numTel from public.connaissances where idContact=${contacts[i]} and idClient=${numEmet}"
+			var requete2 = `select numTel from public.connaissances where idContact=${contacts[i]} and idClient=${numEmet}`
 			console.log(requete2);
 			db.any(requete2, null)
 				.then(function (data) {
 					//Si le couple n'existe pas, on l'insère
 					if(data == null){
-						var requete3 = "insert into public.connaissances (idClient, idContact) values (idClient=${numEmet}, idContact=${contacts[i]})"
+						var requete3 = `insert into public.connaissances (idClient, idContact) values (idClient=${numEmet}, idContact=${contacts[i]})`
 						console.log(requete3);
 						db.none(requete3, null)
 							.then(function(data){
@@ -77,7 +77,7 @@ function setContactList(numEmet, contacts, callback){
 
 // Pour actualiser la localisation de l'utilisateur
 function setLocalisation(num, lat, long, callback){
-  var requete = "update contacts set latitude=${lat}, longitude=${long} where numTel = ${num}"
+  var requete = `update utilisateurs set latitude=${lat}, longitude=${long} where numTel = ${num}`
   console.log(requete);
 
   db.none(requete, null).
@@ -92,7 +92,7 @@ function setLocalisation(num, lat, long, callback){
 // Pour récupérer la localisation de l'utilisateur
 //	=> A changer : passer une liste de contacts et récupérer les utilisateur à moins d'un km avec postgis TODO
 function getLocalisation(num, callback){
-  var requete = "select latitude, longitude from public.contacts where numTel = ${num}"
+  var requete = `select latitude, longitude from public.utilisateurs where numTel = ${num}`
   console.log(requete);
 
   db.any(requete, null)
@@ -108,7 +108,7 @@ function getLocalisation(num, callback){
 
 // date inséré dans la requete avec la fonction now()
 function setMessage(numEme, numDest, type, data, callback){
-  var requete = "insert into messages (emetteur, type, contenu, dateEnvoi, destinataire) values  ${numEme}, '${type}', ${data}, now(), ${numDest} "
+  var requete = `insert into messages (emetteur, dateEnvoi, destinataire, type, contenu) values  ${numEme}, now(), ${numDest}, '${type}', ${data}`
   console.log(requete);
 
   db.none(requete, null).
@@ -136,7 +136,7 @@ function setMessage(numEme, numDest, type, data, callback){
 
 //reception des messages en attente pour l'utilisateur Dest
 function getMessage(numDest, callback){
-  var requete = "select emetteur, type, contenu, dateEnvoi from public.messages , where destinataire=${numDest}"
+  var requete = `select emetteur, type, contenu, dateEnvoi from public.messages where destinataire=${numDest}`
   console.log(requete);
 
   db.any(requete, null)
@@ -152,7 +152,7 @@ function getMessage(numDest, callback){
 
 //delete message périmé
 function deleteMessage(callback){
-    var requete = "delete from messages where datediff(curdate(), dateEnvoi)>1"
+    var requete = `delete from messages where datediff(curdate(), dateEnvoi)>1`
     console.log(requete);
 
     db.none(requete, null).
@@ -162,3 +162,14 @@ function deleteMessage(callback){
           console.log(error) // devrait normalement remonter à la page web
       })
 }
+
+module.exports = {
+  getUser,
+  setContactList,
+  setLocalisation,
+  getLocalisation,
+  setMessage,
+  getMessage,
+  deleteMessage
+};
+
