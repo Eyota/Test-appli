@@ -105,15 +105,12 @@ var app = {
 
             var options = new ContactFindOptions();
             //options.filter="Mathurin";
-<<<<<<< HEAD
             options.hasPhoneNumber=true;
             options.multiple=true;
             options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
             var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-=======
-            //var fields = ["displayName", "name"];
-            var fields = ["phoneNumbers"];
->>>>>>> b45b3aeb20c71e3170b5e3d81afad4a3da643ce2
+
+
 
 
 
@@ -125,6 +122,22 @@ var app = {
                 //         "Family Name: "  + contacts[i].name.familyName      + "\n" +
                 //         "Given Name: "   + contacts[i].name.givenName);
                 // }
+
+                /*
+                $.ajax({
+                    type : "POST",
+                    url : "/api/user/contacts",
+                    datatype : "text",
+                    data : contacts.serialize(),
+                    success : function() {
+                       alert("ok!")
+                    },
+                    error : function() {
+                        alert("try again")
+                    }
+                });
+                */
+
 
                 $.ajax({
                     type: 'POST',
@@ -139,6 +152,7 @@ var app = {
                     }
 
                 });
+
 
                 window.location = "listContacts.html";
             };
@@ -157,7 +171,9 @@ var app = {
             });
 
         $('#getMap').click(function(){
+            window.location = "getMap.html";
 
+<<<<<<< HEAD
             //getMapLocation();
             window.location = "getMap.html";
             //google.maps.event.addDomListener(window, 'load', getMapLocation);
@@ -194,6 +210,8 @@ var app = {
 
 
             //window.location = "getMap.html";
+=======
+>>>>>>> d1b397f45950e82902b8923812e5ec8ed0002175
         });
 
 
