@@ -53,7 +53,16 @@
 //     })
 // })
 
-//var map = require('../../services/maps.js');
+//var mustache = require ('mustache');
+// var express = require('express');
+// var path = require('path');
+// var exp = express(); // creation du serveur
+// var mustacheExpress = require('mustache-express');
+// var session = require('express-session')
+
+// app.set('views', path.join( '../views'));
+// app.engine('mustache', mustacheExpress());
+// app.set('view engine', 'mustache');
 
 
 var app = {
@@ -76,6 +85,17 @@ var app = {
 
         //var socket = io.connect();
 
+        //var mustache = require ('mustache');
+        // var express = require('express');
+        // var path = require('path');
+        // var exp = express(); // creation du serveur
+        // var mustacheExpress = require('mustache-express');
+        // var session = require('express-session')
+
+        // app.set('views', path.join( '../views'));
+        // app.engine('mustache', mustacheExpress());
+        // app.set('view engine', 'mustache');
+
         $(document).bind("volumeupbutton", callbackFunction)
         $(document).bind("backbutton", onBackKeyDown)
 
@@ -89,7 +109,8 @@ var app = {
             alert('Volume  Up  Button  is  pressed!');
         }
 
-        $('#return').click(function(){
+        $('#return').click( function (res) {
+            //res.render('../views/index', {});
             window.location = "index.html";
         });
 
@@ -99,21 +120,19 @@ var app = {
 
         $('#getMsg').click(function(){
             window.location = "receivedMessages.html";
+            navigator.notification.beep(2);
         });
 
         $('#getContact').click(function(){
 
             var options = new ContactFindOptions();
             //options.filter="Mathurin";
-<<<<<<< HEAD
             options.hasPhoneNumber=true;
             options.multiple=true;
             options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
             var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-=======
             //var fields = ["displayName", "name"];
             var fields = ["phoneNumbers"];
->>>>>>> b45b3aeb20c71e3170b5e3d81afad4a3da643ce2
 
 
 
@@ -158,7 +177,10 @@ var app = {
 
         $('#getMap').click(function(){
             window.location = "getMap.html";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0e7191c4b6e0a7c25a9292d600b1d996874e7fd8
         });
 
 

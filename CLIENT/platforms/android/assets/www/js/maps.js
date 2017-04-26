@@ -29,7 +29,7 @@ var onMapSuccess = function (position) {
 // Get map by using coordinates
 
 function getMap(latitude, longitude) {
-    
+
     var mapOptions = {
         center: new google.maps.LatLng(latitude, longitude),
         zoom: 1,
@@ -78,6 +78,7 @@ function onMapError(error) {
 // Watch your changing position
 
 function watchMapPosition() {
+    console.log("Ecoute des coordonnées de géolocalisation");
 
     return navigator.geolocation.watchPosition
     (onMapWatchSuccess, onMapError, { enableHighAccuracy: true });
