@@ -1,29 +1,30 @@
 var db = require ('../db/request.js');
 
 
-/*var timer ;
+var timer ;
 var alpha=1;
 
 function applicationOn(socket){
 
-	// A l'ouvertrue de l'application on actualise les contacts possédant l'Appligator & qui sont dans les contacts
-
-	var res = getContactNum();
 
 	// setInterval permet de mettre en place un appel cyclique toutes les <x> millisecondes
     timer = setInterval(function(){
 
     	// on actualise la position de l'utilisateur
-        var res1 = updatePos();
-        socket.send(res1.localisation); // envoie des données sur la websocket
+        	//var res1 = updatePos();
+        	//socket.send(res1.localisation); // envoie des données sur la websocket
+	socket.emit('localisation', 'Gimme your pos !');
+	socket.on('myLoc', function(data){
+		console.log(data);
+	})
 
-        // on récupère les messages
+       /* // on récupère les messages
         var res2 = getMsgs();
         //socket.send(res2);// necessaire?
 
         //on récupère les contacts présent autour de l'utilisateur
         var res3 = getContactPos();
-        //socket.send()
+        //socket.send()*/
 
         alpha += 0.1;
       }, 100)
@@ -38,7 +39,7 @@ function applicationOff(socket){
 	// supprimer l'appel cyclique désigné par timer
     clearInterval(timer);
 
-}*/
+}
 
 function setContactList(req, res){
 	var contactsString = req.body.contactsString;
@@ -47,6 +48,7 @@ function setContactList(req, res){
 	db.setContactList(num, contacts, function(error,data){
 		if (error == null){
 				console.log(data);
+				res.status(200).json({data})
 		}
 		else{
 				console.log(error);
@@ -62,6 +64,7 @@ function getContactNum(req, res){
 	    db.getUser(num,function(error,data){
 	        if (error == null){
 	            console.log(data);
+		    res.status(200).json({data})
 	        }
 	        else{
 	            console.log(error);
@@ -77,6 +80,7 @@ function updatePos(req, res){
     db.setLocalisation(num, function(error,data){
         if (error == null){
             console.log(data);
+	    res.status(200).json({data})
         }
         else{
             console.log(error);
@@ -93,7 +97,7 @@ function getContactPos(req, res){
      	db.getLocalisation(num, function(error,data){
          if (error == null){
              console.log(data);
-
+	     res.status(200).json({data})
          }
          else{
              console.log(error);
@@ -113,12 +117,13 @@ function getMsgs(req, res){
 	    db.getMessage(numUtilisateur, function(error,data){
 	        if (error == null){
 	            console.log(data);
-	            res.status(200).json({
-	              emetteur : data.emetteur,
-	              type : data.type,
-	              dateenvoi : data.dateenvoi,
-	              contenu : data.contenus
-	            })
+	            //res.status(200).json({
+	            //  emetteur : data.emetteur //,
+	            //  type : data.type,
+	            //  dateenvoi : data.dateenvoi,
+	            //  contenu : data.contenus
+	            //})
+		   res.status(200).json({data})
 	        }
 	        else{
 	            console.log(error);
@@ -132,6 +137,7 @@ function createMsg(req, res){
 	db.setMessage(function(error,data){
         if (error == null){
             console.log(data);
+	    res.status(200).json({data})
         }
         else{
             console.log(error);

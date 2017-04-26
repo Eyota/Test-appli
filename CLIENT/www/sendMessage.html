@@ -52,7 +52,10 @@
                 Ce message sera envoyé à tous les contacts possédant l'application dans un périmètre de 1 km.
                 <form method="GET">
                     Message:<input type='text' name='msg'/>
-                <input type="submit" value = "Envoyer"/>
+                <!-- <input type="submit" id="createMsg" value = "Envoyer"/> -->
+                <button  action="submit" id="createMsg" class="btn btn-block btn-outlined">
+                   Envoyer
+                </button >
             </div>
         </div>
 
@@ -71,5 +74,6 @@
         <script  type="text/javascript" src="js/ratchet.js"></script>
         <script  type="text/javascript" src="cordova.js"></script>
         <script  type="text/javascript" src="js/index.js"></script>
+        <script  type="text/javascript" src="js/write_msg.js"></script>
     </body>
 </html>

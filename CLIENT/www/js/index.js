@@ -96,6 +96,10 @@ var app = {
         // app.engine('mustache', mustacheExpress());
         // app.set('view engine', 'mustache');
 
+    	// socket.on('localisation', function(socket) {
+    	// 	socket.emit('myLoc', 'This is my pos');
+    	// })
+
         $(document).bind("volumeupbutton", callbackFunction)
         $(document).bind("backbutton", onBackKeyDown)
 
