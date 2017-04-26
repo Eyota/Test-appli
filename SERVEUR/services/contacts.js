@@ -1,29 +1,30 @@
 var db = require ('../db/request.js');
 
 
-/*var timer ;
+var timer ;
 var alpha=1;
 
 function applicationOn(socket){
 
-	// A l'ouvertrue de l'application on actualise les contacts possédant l'Appligator & qui sont dans les contacts
-
-	var res = getContactNum();
 
 	// setInterval permet de mettre en place un appel cyclique toutes les <x> millisecondes
     timer = setInterval(function(){
 
     	// on actualise la position de l'utilisateur
-        var res1 = updatePos();
-        socket.send(res1.localisation); // envoie des données sur la websocket
+        	//var res1 = updatePos();
+        	//socket.send(res1.localisation); // envoie des données sur la websocket
+	socket.emit('localisation', 'Gimme your pos !');
+	socket.on('myLoc', function(data){
+		console.log(data);
+	})
 
-        // on récupère les messages
+       /* // on récupère les messages
         var res2 = getMsgs();
         //socket.send(res2);// necessaire?
 
         //on récupère les contacts présent autour de l'utilisateur
         var res3 = getContactPos();
-        //socket.send()
+        //socket.send()*/
 
         alpha += 0.1;
       }, 100)
@@ -38,7 +39,7 @@ function applicationOff(socket){
 	// supprimer l'appel cyclique désigné par timer
     clearInterval(timer);
 
-}*/
+}
 
 function setContactList(req, res){
 	var contactsString = req.body.contactsString;

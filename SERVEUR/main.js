@@ -21,7 +21,7 @@ var req = require('./db/request');
 
 app.use('/api/', contact_router);
 
-req.setContactList('0625052785', '0663103807',
+/*req.setContactList('0625052785', '0663103807',
 	function(error,data){
 	        if (error == null){
 	            console.log(data);
@@ -29,7 +29,7 @@ req.setContactList('0625052785', '0663103807',
 	        else{
 	            console.log(error);
 	        }
-});
+});*/
 
 io.on('connection', function (socket) {
   socket.emit('message', 'Vous �tes bien connect� !');

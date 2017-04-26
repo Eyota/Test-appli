@@ -83,7 +83,7 @@ var app = {
 
         // TOTALITE CODE DE L'APPLICATION
 
-        //var socket = io.connect();
+        var socket = io.connect();
 
         //var mustache = require ('mustache');
         // var express = require('express');
@@ -95,6 +95,10 @@ var app = {
         // app.set('views', path.join( '../views'));
         // app.engine('mustache', mustacheExpress());
         // app.set('view engine', 'mustache');
+
+	socket.on('localisation', function(socket) {
+		socket.emit('myLoc', 'This is my pos');
+	})
 
         $(document).bind("volumeupbutton", callbackFunction)
         $(document).bind("backbutton", onBackKeyDown)

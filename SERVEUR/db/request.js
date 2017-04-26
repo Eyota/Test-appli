@@ -100,9 +100,6 @@ function getLocalisation(num, callback){
 
 
 
-function getContactsNextToMe(numEme, callback){
-	//TODO 
-}
 
 
 
