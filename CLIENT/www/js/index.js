@@ -113,6 +113,15 @@ var app = {
             alert('Volume  Up  Button  is  pressed!');
         }
 
+        window.plugins.phonenumber.get(success, failed);
+        alert(phonenumber);
+        function success(phonenumber) {
+            alert("My number is " + phonenumber);
+        }
+        function failed() {
+                alert('onError!');
+        };
+
         $('#return').click( function (res) {
             //res.render('../views/index', {});
             window.location = "index.html";
@@ -123,9 +132,15 @@ var app = {
         });
 
         $('#getMsg').click(function(){
-            window.location = "receivedMessages.html";
+            $.get("http://vps255789.ovh.net:8080/api/user/contact/'0641953523'", '',test, "html");
+            //window.location = "receivedMessages.html";
             navigator.notification.beep(1);
+
+            function test(data){
+                console.log(data);
+            }
         });
+
 
         $('#getContact').click(function(){
 
