@@ -105,12 +105,15 @@ var app = {
 
             var options = new ContactFindOptions();
             //options.filter="Mathurin";
+<<<<<<< HEAD
             options.hasPhoneNumber=true;
             options.multiple=true;
             options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
             var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-
-
+=======
+            //var fields = ["displayName", "name"];
+            var fields = ["phoneNumbers"];
+>>>>>>> b45b3aeb20c71e3170b5e3d81afad4a3da643ce2
 
 
 
@@ -122,22 +125,6 @@ var app = {
                 //         "Family Name: "  + contacts[i].name.familyName      + "\n" +
                 //         "Given Name: "   + contacts[i].name.givenName);
                 // }
-
-                /*
-                $.ajax({
-                    type : "POST",
-                    url : "/api/user/contacts",
-                    datatype : "text",
-                    data : contacts.serialize(),
-                    success : function() {
-                       alert("ok!")
-                    },
-                    error : function() {
-                        alert("try again")
-                    }
-                });
-                */
-
 
                 $.ajax({
                     type: 'POST',
@@ -152,7 +139,6 @@ var app = {
                     }
 
                 });
-
 
                 window.location = "listContacts.html";
             };
@@ -173,45 +159,6 @@ var app = {
         $('#getMap').click(function(){
             window.location = "getMap.html";
 
-<<<<<<< HEAD
-            //getMapLocation();
-            window.location = "getMap.html";
-            //google.maps.event.addDomListener(window, 'load', getMapLocation);
-
-
-            // document.addEventListener("online", onOnline, false);
-            // document.addEventListener("resume", onResume, false);
-            // loadMapsApi();
-
-            // function onOnline() {
-            //     loadMapsApi();
-            // }
-
-            // function onResume() {
-            //     loadMapsApi();
-            // }
-
-            // function loadMapsApi() {
-            //     // if (navigator.connection.type === Connection.NONE || (global.google !== undefined && global.google.maps)) {
-            //     //     return;
-            //     // }
-
-            //     //TODO: Add your own Google maps API key to the URL below.
-            //     $.getScript('https://maps.googleapis.com/maps/api/js?sensor=true&callback=onMapsApiLoaded&key=AIzaSyC6O0j1Cvo3VUU-ye0tnbe9QznskTeik08');
-            // }
-
-            // window.onMapsApiLoaded = function () {
-            //     // Maps API loaded and ready to be used.
-            //     var map = new google.maps.Map(document.getElementById("map"), {
-            //         zoom: 8,
-            //         center: new google.maps.LatLng(-34.397, 150.644)
-            //     });
-            // };
-
-
-            //window.location = "getMap.html";
-=======
->>>>>>> d1b397f45950e82902b8923812e5ec8ed0002175
         });
 
 

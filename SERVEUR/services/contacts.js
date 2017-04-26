@@ -47,6 +47,7 @@ function setContactList(req, res){
 	db.setContactList(num, contacts, function(error,data){
 		if (error == null){
 				console.log(data);
+				res.status(200).json({data})
 		}
 		else{
 				console.log(error);
@@ -62,6 +63,7 @@ function getContactNum(req, res){
 	    db.getUser(num,function(error,data){
 	        if (error == null){
 	            console.log(data);
+		    res.status(200).json({data})
 	        }
 	        else{
 	            console.log(error);
@@ -77,6 +79,7 @@ function updatePos(req, res){
     db.setLocalisation(num, function(error,data){
         if (error == null){
             console.log(data);
+	    res.status(200).json({data})
         }
         else{
             console.log(error);
@@ -93,7 +96,7 @@ function getContactPos(req, res){
      	db.getLocalisation(num, function(error,data){
          if (error == null){
              console.log(data);
-
+	     res.status(200).json({data})
          }
          else{
              console.log(error);
@@ -113,12 +116,13 @@ function getMsgs(req, res){
 	    db.getMessage(numUtilisateur, function(error,data){
 	        if (error == null){
 	            console.log(data);
-	            res.status(200).json({
-	              emetteur : data.emetteur,
-	              type : data.type,
-	              dateenvoi : data.dateenvoi,
-	              contenu : data.contenus
-	            })
+	            //res.status(200).json({
+	            //  emetteur : data.emetteur //,
+	            //  type : data.type,
+	            //  dateenvoi : data.dateenvoi,
+	            //  contenu : data.contenus
+	            //})
+		   res.status(200).json({data})
 	        }
 	        else{
 	            console.log(error);
@@ -132,6 +136,7 @@ function createMsg(req, res){
 	db.setMessage(function(error,data){
         if (error == null){
             console.log(data);
+	    res.status(200).json({data})
         }
         else{
             console.log(error);
