@@ -120,13 +120,14 @@ var app = {
 
         $('#getMsg').click(function(){
             window.location = "receivedMessages.html";
-            navigator.notification.beep(2);
+            navigator.notification.beep(1);
         });
 
         $('#getContact').click(function(){
 
             var options = new ContactFindOptions();
             //options.filter="Mathurin";
+
             options.hasPhoneNumber=true;
             options.multiple=true;
             options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
@@ -134,7 +135,6 @@ var app = {
 
             //var fields = ["displayName", "name"];
             //var fields = ["phoneNumbers"];
-
 
 
 
@@ -179,6 +179,7 @@ var app = {
 
         $('#getMap').click(function(){
             window.location = "getMap.html";
+
         });
 
 
