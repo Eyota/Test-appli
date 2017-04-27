@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router();
 var service = require('../services/contacts');
-var maps = require('../../CLIENT/www/js/maps');
+//var maps = require('../../CLIENT/www/js/maps');
 
 router.post('/user/contact/', service.setContactList);
 router.get('/user/contact/:num', service.getContactNum);

@@ -11,9 +11,11 @@ var contact_services = require('./services/contacts');
 
 var req = require('./db/request');
 
-/*app.use(bodyParser.urlencoded({     // pour gérer les URL-encoded bodies (envoie formulaire en POST)
+
+app.use(bodyParser.urlencoded({     // pour gérer les URL-encoded bodies (envoie formulaire en POST)
+
   extended: true
-}));*/
+}));
 
 //app.set('views', path.join( 'public/views'));
 //app.use(bodyParser.json) // permet de lire le json envoyé en POST depuis le client

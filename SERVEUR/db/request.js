@@ -8,7 +8,7 @@ var db = pgb(dbconfig)
 //demande a la base de données si l'utilisateur au n°x a l'application
 // Si la réponse est vide, l'utilisateur n'a pas l'app
 function getUser(num,callback){
-  var requete = `select numTel, nom from public.utilisateurs where numTel=${num}`
+  var requete = `select numTel, nom from utilisateurs where numTel=${num}`
   console.log(requete);
 
   db.any(requete, null)
@@ -27,21 +27,21 @@ function getUser(num,callback){
 
 function setContactList(numEmet, numContact, callback){ //---> OK !!! 
 
-    var requete = `select numTel, nom from public.utilisateurs where numTel='${numContact}'`
+    var requete = `select numTel, nom from utilisateurs where numTel='${numContact}'`
     console.log(requete);
     db.any(requete, null)
 	.then(function (data) {
 		console.log(JSON.stringify(data));
 		//Si une ligne est retournée, le contact est utilisateur : il faut insérer le couple utilisateur/contact dans la table connaissance s'il n'y est pas encore
 		if(JSON.stringify(data) != '[]'){
-			var requete2 = `select idContact from public.connaissances where idContact='${numContact}' and idClient='${numEmet}'`
+			var requete2 = `select idContact from connaissances where idContact='${numContact}' and idClient='${numEmet}'`
 			console.log(requete2);
 			db.any(requete2, null)
 				.then(function (data) {
 					console.log(data);
 					//Si le couple n'existe pas, on l'insère
 					if(JSON.stringify(data) == '[]'){
-						var requete3 = `insert into public.connaissances (idClient, idContact) values ('${numEmet}', '${numContact}')`
+						var requete3 = `insert into connaissances (idClient, idContact) values ('${numEmet}', '${numContact}')`
 						console.log(requete3);
 						db.none(requete3, null)
 							.then(function(data){
@@ -105,8 +105,8 @@ function getLocalisation(num, callback){
 
 
 // date inséré dans la requete avec la fonction now()
-function setMessage(numEme, numDest, type, data, callback){
-  var requete = `insert into messages (emetteur, dateEnvoi, destinataire, type, contenu) values  (${numEme}, now(), ${numDest}, '${type}', ${data})`
+function setMessage(numEme, latitude, longitude, type, data, callback){
+  var requete = `insert into messages (emetteur, dateEnvoi, latitude, longitude, type, contenu) values  (${numEme}, now(), ${latitude}, ${longitude}, '${type}', ${data})`
   console.log(requete);
 
   db.none(requete, null).

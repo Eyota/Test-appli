@@ -14,9 +14,9 @@ function applicationOn(socket){
         	//var res1 = updatePos();
         	//socket.send(res1.localisation); // envoie des données sur la websocket
 	socket.emit('localisation', 'Gimme your pos !');
-	socket.on('myLoc', function(data){
+	socket.onmessage = function(event){
 		console.log(data);
-	})
+	}
 
        /* // on récupère les messages
         var res2 = getMsgs();
@@ -43,18 +43,22 @@ function applicationOff(socket){
 
 function setContactList(req, res){
 	var contactsString = req.body.contactsString;
+	var num = req.body.num;
 	var contacts = JSON.parse(contactsString);
-	var num = '0600000000'
-	db.setContactList(num, contacts, function(error,data){
-		if (error == null){
+	console.log(contacts);
+	var len = contacts.length
+	for (i=0; i<len; i++){
+		var contactNum = contacts[i].phoneNumbers[0];
+		db.setContactList(num, contactNum, function(error,data){
+			if (error == null){
 				console.log(data);
-				res.status(200).json({data})
-		}
-		else{
+			}
+			else{
 				console.log(error);
 				res.status(500).send(error);
-		}
-	})
+			}
+		})
+	}
 }
 
 
@@ -64,7 +68,7 @@ function getContactNum(req, res){
 	    db.getUser(num,function(error,data){
 	        if (error == null){
 	            console.log(data);
-		    res.status(200).json({data})
+		    res.status(200).json(data);
 	        }
 	        else{
 	            console.log(error);
@@ -74,7 +78,7 @@ function getContactNum(req, res){
 }
 
 
-// a faire avec le module de cordova
+
 function updatePos(req, res){
 	var num = req.params.num;
     db.setLocalisation(num, function(error,data){
@@ -91,7 +95,7 @@ function updatePos(req, res){
 
 }
 
-// cette fonction renvoi les contacts retournés par getContactNum qui sont dans les X km autour de l'utilisateur
+// cette fonction renvoie les contacts retournés par getContactNum qui sont dans les X km autour de l'utilisateur
 function getContactPos(req, res){
 	var num = req.params.num;
      	db.getLocalisation(num, function(error,data){
@@ -134,15 +138,25 @@ function getMsgs(req, res){
 
 
 function createMsg(req, res){
-	db.setMessage(function(error,data){
-        if (error == null){
-            console.log(data);
-	    res.status(200).json({data})
-        }
-        else{
-            console.log(error);
-            res.status(500).send(error);
-        }
+	console.log('envoi message')
+	console.log(req.body)
+	console.log(req.body.contenu)
+	res.status(200).send('ok')
+	var num = req.body.num
+	var type = 'text'
+	var lat = req.body.latitude
+	var long = req.body.longitude
+	var contenu = req.body.contenu
+
+	db.setMessage(num, lat, long, type, contenu, function(error,data){
+        	if (error == null){
+            		console.log(data);
+	    		res.status(200).json({data})
+        	}
+        	else{
+            		console.log(error);
+            		res.status(500).send(error);
+        	}
     })
 }
 
