@@ -5,6 +5,8 @@ var Longitude = undefined;
 
 function getMapLocation() {
 
+    console.log("Récupération des coordonnées de géolocalisation");
+
     navigator.geolocation.getCurrentPosition
     (onMapSuccess, onMapError, { enableHighAccuracy: true });
 }
@@ -16,25 +18,26 @@ var onMapSuccess = function (position) {
     Latitude = position.coords.latitude;
     Longitude = position.coords.longitude;
 
-    alert('latitude:'+ Latitude + '\n'+ 'longitude:' + Longitude);
-    window.location = "getMap.html";
-    
-    getMap(Latitude, Longitude);
+    console.log('latitude:'+ Latitude + '\n'+ 'longitude:' + Longitude);
+
+    google.maps.event.addDomListener(window, 'load', getMap(Latitude, Longitude));
 
 }
+
+
 
 // Get map by using coordinates
 
 function getMap(latitude, longitude) {
 
     var mapOptions = {
-        center: new google.maps.LatLng(0, 0),
+        center: new google.maps.LatLng(latitude, longitude),
         zoom: 1,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
-    map = new google.maps.Map
-    (document.getElementById("map"), mapOptions);
+    var map = new google.maps.Map
+    (document.getElementById("map_canvas"), mapOptions);
 
 
     var latLong = new google.maps.LatLng(latitude, longitude);
@@ -46,6 +49,7 @@ function getMap(latitude, longitude) {
     marker.setMap(map);
     map.setZoom(15);
     map.setCenter(marker.getPosition());
+
 }
 
 // Success callback for watching your changing position
@@ -74,6 +78,7 @@ function onMapError(error) {
 // Watch your changing position
 
 function watchMapPosition() {
+    console.log("Ecoute des coordonnées de géolocalisation");
 
     return navigator.geolocation.watchPosition
     (onMapWatchSuccess, onMapError, { enableHighAccuracy: true });

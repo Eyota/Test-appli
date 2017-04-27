@@ -11,7 +11,9 @@ var contact_services = require('./services/contacts');
 
 var req = require('./db/request');
 
+
 app.use(bodyParser.urlencoded({     // pour gérer les URL-encoded bodies (envoie formulaire en POST)
+
   extended: true
 }));
 

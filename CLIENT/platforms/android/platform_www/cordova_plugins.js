@@ -90,6 +90,30 @@ module.exports = [
         "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
         "pluginId": "cordova-plugin-geolocation",
         "runs": true
+    },
+    {
+        "id": "cordova-plugin-dialogs.notification",
+        "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+        "pluginId": "cordova-plugin-dialogs",
+        "merges": [
+            "navigator.notification"
+        ]
+    },
+    {
+        "id": "cordova-plugin-dialogs.notification_android",
+        "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
+        "pluginId": "cordova-plugin-dialogs",
+        "merges": [
+            "navigator.notification"
+        ]
+    },
+    {
+        "id": "at.oneminutedistraction.phonenumber.PhoneNumber",
+        "file": "plugins/at.oneminutedistraction.phonenumber/www/phonenumber.js",
+        "pluginId": "at.oneminutedistraction.phonenumber",
+        "clobbers": [
+            "phonenumber"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -98,7 +122,9 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.3.2",
     "cordova-plugin-compat": "1.1.0",
     "cordova-plugin-contacts": "2.3.0",
-    "cordova-plugin-geolocation": "2.4.2"
+    "cordova-plugin-geolocation": "2.4.2",
+    "cordova-plugin-dialogs": "1.3.2",
+    "at.oneminutedistraction.phonenumber": "0.0.1"
 };
 // BOTTOM OF METADATA
 });

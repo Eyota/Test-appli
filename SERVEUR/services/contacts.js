@@ -142,7 +142,6 @@ function createMsg(req, res){
 	console.log(req.body)
 	console.log(req.body.contenu)
 	res.status(200).send('ok')
-	/*
 	var num = req.body.num
 	var type = 'text'
 	var lat = req.body.latitude
@@ -158,7 +157,7 @@ function createMsg(req, res){
             		console.log(error);
             		res.status(500).send(error);
         	}
-    })*/
+    })
 }
 
 module.exports = {

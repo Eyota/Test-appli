@@ -15,6 +15,12 @@
         },
         "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "fr.ensimag.TP_App_Mobile"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "fr.ensimag.TP_App_Mobile"
+        },
+        "at.oneminutedistraction.phonenumber": {
+            "PACKAGE_NAME": "fr.ensimag.TP_App_Mobile"
         }
     },
     "dependent_plugins": {

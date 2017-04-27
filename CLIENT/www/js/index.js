@@ -53,7 +53,16 @@
 //     })
 // })
 
-//var map = require('../../services/maps.js');
+//var mustache = require ('mustache');
+// var express = require('express');
+// var path = require('path');
+// var exp = express(); // creation du serveur
+// var mustacheExpress = require('mustache-express');
+// var session = require('express-session')
+
+// app.set('views', path.join( '../views'));
+// app.engine('mustache', mustacheExpress());
+// app.set('view engine', 'mustache');
 
 
 var app = {
@@ -76,6 +85,21 @@ var app = {
 
         //var socket = io.connect();
 
+        //var mustache = require ('mustache');
+        // var express = require('express');
+        // var path = require('path');
+        // var exp = express(); // creation du serveur
+        // var mustacheExpress = require('mustache-express');
+        // var session = require('express-session')
+
+        // app.set('views', path.join( '../views'));
+        // app.engine('mustache', mustacheExpress());
+        // app.set('view engine', 'mustache');
+
+    	// socket.on('localisation', function(socket) {
+    	// 	socket.emit('myLoc', 'This is my pos');
+    	// })
+
         $(document).bind("volumeupbutton", callbackFunction)
         $(document).bind("backbutton", onBackKeyDown)
 
@@ -89,7 +113,17 @@ var app = {
             alert('Volume  Up  Button  is  pressed!');
         }
 
-        $('#return').click(function(){
+        window.plugins.phonenumber.get(success, failed);
+        alert(phonenumber);
+        function success(phonenumber) {
+            alert("My number is " + phonenumber);
+        }
+        function failed() {
+                alert('onError!');
+        };
+
+        $('#return').click( function (res) {
+            //res.render('../views/index', {});
             window.location = "index.html";
         });
 
@@ -98,22 +132,28 @@ var app = {
         });
 
         $('#getMsg').click(function(){
-            window.location = "receivedMessages.html";
+            $.get("http://vps255789.ovh.net:8080/api/user/contact/'0641953523'", '',test, "html");
+            //window.location = "receivedMessages.html";
+            navigator.notification.beep(1);
+
+            function test(data){
+                console.log(data);
+            }
         });
+
 
         $('#getContact').click(function(){
 
             var options = new ContactFindOptions();
             //options.filter="Mathurin";
-<<<<<<< HEAD
+
             options.hasPhoneNumber=true;
             options.multiple=true;
             options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
             var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-=======
+
             //var fields = ["displayName", "name"];
-            var fields = ["phoneNumbers"];
->>>>>>> b45b3aeb20c71e3170b5e3d81afad4a3da643ce2
+            //var fields = ["phoneNumbers"];
 
 
 
@@ -157,43 +197,8 @@ var app = {
             });
 
         $('#getMap').click(function(){
-
-            //getMapLocation();
             window.location = "getMap.html";
-            //google.maps.event.addDomListener(window, 'load', getMapLocation);
 
-
-            // document.addEventListener("online", onOnline, false);
-            // document.addEventListener("resume", onResume, false);
-            // loadMapsApi();
-
-            // function onOnline() {
-            //     loadMapsApi();
-            // }
-
-            // function onResume() {
-            //     loadMapsApi();
-            // }
-
-            // function loadMapsApi() {
-            //     // if (navigator.connection.type === Connection.NONE || (global.google !== undefined && global.google.maps)) {
-            //     //     return;
-            //     // }
-
-            //     //TODO: Add your own Google maps API key to the URL below.
-            //     $.getScript('https://maps.googleapis.com/maps/api/js?sensor=true&callback=onMapsApiLoaded&key=AIzaSyC6O0j1Cvo3VUU-ye0tnbe9QznskTeik08');
-            // }
-
-            // window.onMapsApiLoaded = function () {
-            //     // Maps API loaded and ready to be used.
-            //     var map = new google.maps.Map(document.getElementById("map"), {
-            //         zoom: 8,
-            //         center: new google.maps.LatLng(-34.397, 150.644)
-            //     });
-            // };
-
-
-            //window.location = "getMap.html";
         });
 
 
