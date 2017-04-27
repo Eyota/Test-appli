@@ -106,14 +106,6 @@ module.exports = [
         "merges": [
             "navigator.notification"
         ]
-    },
-    {
-        "id": "at.oneminutedistraction.phonenumber.PhoneNumber",
-        "file": "plugins/at.oneminutedistraction.phonenumber/www/phonenumber.js",
-        "pluginId": "at.oneminutedistraction.phonenumber",
-        "clobbers": [
-            "phonenumber"
-        ]
     }
 ];
 module.exports.metadata = 
@@ -123,8 +115,7 @@ module.exports.metadata =
     "cordova-plugin-compat": "1.1.0",
     "cordova-plugin-contacts": "2.3.0",
     "cordova-plugin-geolocation": "2.4.2",
-    "cordova-plugin-dialogs": "1.3.2",
-    "at.oneminutedistraction.phonenumber": "0.0.1"
+    "cordova-plugin-dialogs": "1.3.2"
 };
 // BOTTOM OF METADATA
 });
