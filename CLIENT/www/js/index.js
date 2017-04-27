@@ -168,7 +168,7 @@ var app = {
 
             //alert(storage.getItem("UserPhoneNumber"));
 
-            if (storage.getItem("UserPhoneNumber") == null){
+            if (storage.getItem('UserPhoneNumber') == null){
                 navigator.notification.prompt(
                     'Veuillez entrer votre numéro de téléphone (en 06)',
                     saveLocal,
