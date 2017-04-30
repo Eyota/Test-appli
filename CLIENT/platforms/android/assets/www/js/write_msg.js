@@ -2,57 +2,11 @@ var tmp_storage = window.sessionStorage;
 var Latitude = tmp_storage.getItem("Latitude");
 var Longitude = tmp_storage.getItem("Longitude");
 
-// // Get geo coordinates
-
-// function getMapLocation() {
-
-//     console.log("Récupération des coordonnées de géolocalisation");
-
-//     navigator.geolocation.getCurrentPosition
-//     (onMapSuccess, onMapError, { enableHighAccuracy: true });
-// }
-
-// // Success callback for get geo coordinates
-
-// var onMapSuccess = function (position) {
-
-//     Latitude = position.coords.latitude;
-//     Longitude = position.coords.longitude;
-
-//     console.log('latitude:'+ Latitude + '\n'+ 'longitude:' + Longitude);
-
-//     //google.maps.event.addDomListener(window, 'load', getMap(Latitude, Longitude));
-
-// }
-
-// function onMapError(error) {
-//     console.log('code: ' + error.code + '\n' +
-//         'message: ' + error.message + '\n');
-// }
 
 // envoi du message sur le serveur
 $('#createMsg').click( function (res) {
 
 	alert("ici");
-
-	// navigator.geolocation.getCurrentPosition
- //    (onSuccess, onError, { enableHighAccuracy: true });
-
-	// var onSuccess = function(position) {
-
-	// 	Latitude = position.coords.latitude;
-	// 	Longitude = position.coords.longitude;
-
- //        alert('Latitude: '          + position.coords.latitude          + '\n' +
- //              'Longitude: '         + position.coords.longitude)
- //    }
-
- //    function onError(error) {
-	//     alert('code: ' + error.code + '\n' +
-	//         'message: ' + error.message + '\n');
-	// }
-
-	
 
 	alert('2)latitude:'+ Latitude + '\n'+ 'longitude:' + Longitude);
 
