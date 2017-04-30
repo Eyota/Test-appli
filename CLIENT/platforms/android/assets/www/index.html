@@ -57,7 +57,11 @@
 
         <header class="bar bar-nav">
             <a id ="return" class="icon icon-left-nav pull-left"></a>
+            <a id ="getMsg" class="icon icon-refresh pull-right"></a>
+            <a id ="getContact" class="icon icon-person pull-right"></a>
+            <a id ="getMap" class="icon icon-home pull-right"></a>
             <h1 class="title">AppliGator</h1>
+
         </header>
 
 
@@ -74,7 +78,7 @@
 
                 </script>            
             
-
+<!-- 
                 <button  id="sendMsg" class="btn btn-block btn-outlined">
                     <span  class="icon  icon-compose"></span>
                    Ecrire un message
@@ -99,7 +103,18 @@
                    Ma localisation
                     <img id="myImage"/>
                 </button >
-                
+
+ -->
+                <div id="dynamicListe"></div>
+
+                Ce message sera envoyé à tous les contacts possédant l'application dans un périmètre de 1 km.
+                <form id="form">
+                    Message:<input type='text' id='msg' name='msg'/>
+                <!-- <input type="submit" id="createMsg" value = "Envoyer"/> -->
+                <button  action="submit" id="createMsg" class="btn btn-block btn-outlined">
+                   Envoyer
+                </button >
+
 
             </div>
         </div>

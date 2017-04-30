@@ -148,14 +148,14 @@ var app = {
             }
             else{
                 console.log("Numéro de téléphone de l'utilisateur déjà enregistré");
-                window.location = "sendMessage.html";
+                window.location = "index.html";
             }
 
             function saveLocal(results){
                 console.log("Enregistrement en local du numéro de télphone de l'utilisateur");
                 storage.setItem("UserPhoneNumber", results.input1);
                 console.log("Ce numéro est" + storage.getItem("UserPhoneNumber"));
-                window.location = "sendMessage.html";
+                window.location = "index.html";
             }
         });
 
@@ -181,23 +181,25 @@ var app = {
                     //contentType : 'application/x-www-form-urlencoded',
                     data: {contenu: JSON.stringify(mesg),
                         num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
-                        latitude: JSON.stringify(45.18487515),
-                        longitude: JSON.stringify(5.71864032),
+                        latitude: JSON.stringify(window.tmp_storage.getItem("Latitude")),
+                        longitude: JSON.stringify(window.tmp_storage.getItem("Longitude")),
                         },
                     success : function() {
                         alert('Message bien envoyé');
                     },
-                    error : function() {
-                        function onConfirm(buttonIndex) {
-                            alert('You selected button ' + buttonIndex);
-                        }
+                    error : function(data) {
+                        console.log(data.latitude);
 
-                        navigator.notification.confirm(
-                            "le message n'a pas pu être envoyé! Souhaitez-vous réessayer?", // message
-                             onConfirm,            // callback to invoke with index of button pressed
-                            'Message non envoyé',           // title
-                            ['Oui','Non']     // buttonLabels
-                        );
+                        // function onConfirm(buttonIndex) {
+                        //     alert('You selected button ' + buttonIndex);
+                        // }
+
+                        // navigator.notification.confirm(
+                        //     "le message n'a pas pu être envoyé! Souhaitez-vous réessayer?", // message
+                        //      onConfirm,            // callback to invoke with index of button pressed
+                        //     'Message non envoyé',           // title
+                        //     ['Oui','Non']     // buttonLabels
+                        // );
                         alert("Le message n'a pas pu être envoyé.");
                     }
                 });
@@ -219,24 +221,35 @@ var app = {
                     navigator.notification.beep(1);
                     alert('Message reçu');
                     console.log(data);
-                    console.log(data[0]);
-                    console.log(data[0].contenu);
+                    console.log(data.data[0].contenu);
+                    console.log(data.length);
 
-                    // var template = $("#liste-message").html();
-                    // $('#dynamicListe').html(
-                    //     Mustache.render(template ,
-                    //     {liste: [{value: "un"},{value: "deux"}]})
-                    //     );
+                    //tmp_storage.setItem("Msg",data);
 
-                    var template = "<h1>{{contenu}} {{emetteur}}</h1>";
-                    var html = Mustache.to_html(template, data[0]);
-                    $('#dynamicListe').html(html);
+                    //var template = $("#liste-message").html();
+                    var template = "<ul> {{ #liste}} <li> {{contenu}} </li> {{ /liste }} </ul>";
+                    $('#dynamicListe').html(
+                        Mustache.render(
+                            template,
+                            {liste: [
+                            {contenu: data.data[0].contenu},
+                            {contenu: data.data[1].contenu}
+                            ]}
+                        )
 
-                    window.location = "receivedMessages.html";
+                    );
+
+                    // var template = "{{contenu}} {{emetteur}}";
+                    // //var html = Mustache.to_html(template, data.data[0]);
+                    // var html = Mustache.render(template, data.data[0]);
+                    // $('#dynamicListe').html(html);
+
+                    
                 },
                 error : function() {
                     alert("Aucun message reçu.");
                 }
+                //window.location = "receivedMessages.html";
             });
 
             

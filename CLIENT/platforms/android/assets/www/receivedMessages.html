@@ -10,7 +10,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;"> -->
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
@@ -20,6 +20,7 @@
         <link  href="css/ratchet-theme-android.css" rel="stylesheet">
         <!-- Ajout perso end -->
 
+        <script  type="text/javascript" src="js/index.js"></script>
         
         <title>Messages reçus</title>
     </head>
@@ -32,8 +33,71 @@
             <h1 class="title">Messages reçus</h1>
         </header>
 
-        <div id="dynamicListe"></div>
 
+        <div class="content">
+            <div class="content-padded">
+
+                <script  type="text/javascript" src="js/index.js"></script>
+                
+                <div id="dynamicListe"></div>
+
+                
+                <script type="text/javascript">
+
+                    $.ajax({
+                    type : "GET",
+                    url : 'http://vps255789.ovh.net:8080/api/msg/' + storage.getItem("UserPhoneNumber"),
+                    dataType : "json",
+                    //contentType : 'application/x-www-form-urlencoded',
+                    success : function(data) {
+                        navigator.notification.beep(1);
+                        alert('Message reçu');
+                        console.log(data);
+                        console.log(data.data[0].contenu);
+                        console.log(data.length);
+
+
+                        //var template = $("#liste-message").html();
+                        var template = "<ul> {{ #liste}} <li> {{contenu}} </li> {{ /liste }} </ul>";
+                        
+                        $('#dynamicListe').html(
+                            Mustache.render(
+                                template,
+                                {liste: [
+                                {contenu: data.data[0].contenu},
+                                {contenu: data.data[1].contenu}
+                                ]}
+                            )
+                            //liste: [{value: "un"},{value: "deux"}]})
+                        );
+
+                        // var template = "{{contenu}} {{emetteur}}";
+                        // //var html = Mustache.to_html(template, data.data[0]);
+                        // var html = Mustache.render(template, data.data[0]);
+                        // $('#dynamicListe').html(html);
+
+                        
+                    },
+                    error : function() {
+                        alert("Aucun message reçu.");
+                    }
+                });
+                </script>
+
+<!-- 
+                <script type="text/javascript">
+                    var template = "<ul> {{ #liste}} <li> {{contenu}} </li> {{ /liste }} </ul>";
+                    $('#dynamicListe').html(
+                        Mustache.render(
+                            template,
+                            {liste: [
+                            {contenu: data.data[0].contenu},
+                            {contenu: data.data[1].contenu}
+                            ]}
+                        )
+                    );
+                </script>
+ -->
 
         <!-- <ul class="table-view">
             <li class="table-view-cell table-view-cell">Messages reçus</li>
@@ -47,10 +111,12 @@
         </ul> -->
 
 <!-- 
-        <script type="text/x-mustache-template" id="liste-message"> <ul>
-            {{ #liste}}
-            <li> {{value}} </li>
-            {{ /liste }} </ul>
+        <script type="text/x-mustache-template" id="liste-message">
+             <ul>
+                 {{ #liste}}
+                 <li> {{contenu}} </li>
+                 {{ /liste }}
+             </ul>
         </script>
 
  -->
