@@ -160,37 +160,48 @@ var app = {
         });
 
 
+            /// dans la page sendMessage.html
+            $('#createMsg').click( function (res) {
 
-        $('#createMsg').click( function (res) {
+                alert("ici");
 
-            alert("ici");
+                alert('2)latitude:'+ tmp_storage.getItem("Latitude") + '\n'+ 'longitude:' + tmp_storage.getItem("Longitude"));
+                var $this = $(this);
 
-            alert('2)latitude:'+ tmp_storage.getItem("Latitude") + '\n'+ 'longitude:' + tmp_storage.getItem("Longitude"));
+                var mesg = $('#msg').val();
+                alert(mesg);
 
-            var $this = $(this);
 
-            var mesg = $('#msg').val();
+                console.log("Envoi d'un message");
 
-            console.log("Envoi d'un message");
-
-            $.ajax({
-                type : "POST",
-                url : 'http://vps255789.ovh.net:8080/api/msg/',
-                dataType : "json",
-                //contentType : 'application/x-www-form-urlencoded',
-                data: {contenu: JSON.stringify(mesg),
-                    num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
-                    latitude: JSON.stringify(45.18487515),
-                    longitude: JSON.stringify(5.71864032),
+                $.ajax({
+                    type : "POST",
+                    url : 'http://vps255789.ovh.net:8080/api/msg/',
+                    dataType : "json",
+                    //contentType : 'application/x-www-form-urlencoded',
+                    data: {contenu: JSON.stringify(mesg),
+                        num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
+                        latitude: JSON.stringify(45.18487515),
+                        longitude: JSON.stringify(5.71864032),
+                        },
+                    success : function() {
+                        alert('Message bien envoyé');
                     },
-                success : function() {
-                    alert('Message bien envoyé');
-                },
-                error : function() {
-                    alert("Le message n'a pas pu être envoyé.");
-                }
+                    error : function() {
+                        function onConfirm(buttonIndex) {
+                            alert('You selected button ' + buttonIndex);
+                        }
+
+                        navigator.notification.confirm(
+                            "le message n'a pas pu être envoyé! Souhaitez-vous réessayer?", // message
+                             onConfirm,            // callback to invoke with index of button pressed
+                            'Message non envoyé',           // title
+                            ['Oui','Non']     // buttonLabels
+                        );
+                        alert("Le message n'a pas pu être envoyé.");
+                    }
+                });
             });
-        });
 
 
 
@@ -204,15 +215,31 @@ var app = {
                 url : 'http://vps255789.ovh.net:8080/api/msg/' + storage.getItem("UserPhoneNumber"),
                 dataType : "json",
                 //contentType : 'application/x-www-form-urlencoded',
-                success : function() {
+                success : function(data) {
                     navigator.notification.beep(1);
                     alert('Message reçu');
+                    console.log(data);
+                    console.log(data[0]);
+                    console.log(data[0].contenu);
+
+                    // var template = $("#liste-message").html();
+                    // $('#dynamicListe').html(
+                    //     Mustache.render(template ,
+                    //     {liste: [{value: "un"},{value: "deux"}]})
+                    //     );
+
+                    var template = "<h1>{{contenu}} {{emetteur}}</h1>";
+                    var html = Mustache.to_html(template, data[0]);
+                    $('#dynamicListe').html(html);
+
                     window.location = "receivedMessages.html";
                 },
                 error : function() {
                     alert("Aucun message reçu.");
                 }
             });
+
+            
 
         });
 
@@ -247,7 +274,15 @@ var app = {
         });
 
         $('#updateContacts').click(function(){
-            alert("updatecontacts");
+            console.log("updatecontacts");
+            var options = new ContactFindOptions();
+
+            options.hasPhoneNumber=true;
+            options.multiple=true;
+            options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
+            
+            var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+
             navigator.contacts.find(fields, onSuccess, onError, options);
             window.location = "listContacts.html";
         });
@@ -265,7 +300,7 @@ var app = {
             
             tmp_storage.setItem("nbrContacts", contacts.length);
 
-            $('#spinner').after(spinner.stop().el);
+            //$('#spinner').after(spinner.stop().el);
             // for (var i = 0; i < contacts.length; i++) {
             //     alert("Formatted: "  + contacts[i].name.formatted       + "\n" +
             //         "Family Name: "  + contacts[i].name.familyName      + "\n" +
@@ -275,7 +310,7 @@ var app = {
             // for (var i = 0; i < contacts.length; i++) {
             //     $.ajax({
             //         type : "POST",
-            //         url : 'http://vps255789.ovh.net:8080/api/user/contacts/',
+            //         url : 'http://vps255789.ovh.net:8080/api/user/contact/',
             //         dataType : "json",
             //         //contentType : 'application/x-www-form-urlencoded',
             //         data: {
@@ -292,23 +327,43 @@ var app = {
             //     });
 
             // }
-
+            var erreur = 0;
+            for (var i = 0; i < contacts.length; i++) {
             $.ajax({
                     type : "POST",
-                    url : 'http://vps255789.ovh.net:8080/api/user/contacts/',
+                    url : 'http://vps255789.ovh.net:8080/api/user/contact/',
                     dataType : "json",
                     //contentType : 'application/x-www-form-urlencoded',
                     data: {
-                        contacts: JSON.stringify(contacts)
+                        user: window.localStorage.getItem('UserPhoneNumber'),
+                        contact: contacts[i].phoneNumbers[0]
                     },
                     success : function() {
-                        alert('Contacts du téléphone correctement transféré au serveur');
+                        console.log('Contacts du téléphone correctement transféré au serveur');
                     },
                     error : function() {
-                        alert("Les contacts du téléphone n'ont pas pu être transféré au serveur");
+                        console.log("Les contacts du téléphone n'ont pas pu être transféré au serveur");
+                        erreur = erreur+1;
+                        //alert("erreur");
                     }
                 });
+            }
+            if (erreur !=0){
+                function onConfirm(buttonIndex) {
+                    alert('You selected button ' + buttonIndex);
+                    window.location = "index.html";
+                }
+                
 
+                navigator.notification.confirm(
+                    erreur + " contacts n'ont pas pu être envoyé! Souhaitez-vous réessayer?", // message
+                     onConfirm,            // callback to invoke with index of button pressed
+                    'Contacts non envoyé',           // title
+                    ['Oui','Non']     // buttonLabels
+                );
+
+            }
+            $('#spinner').after(spinner.stop().el);
             window.location = "index.html";
         };
 

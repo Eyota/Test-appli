@@ -32,19 +32,28 @@
             <h1 class="title">Messages reçus</h1>
         </header>
 
+        <div id="dynamicListe"></div>
 
-        <ul class="table-view">
+
+        <!-- <ul class="table-view">
             <li class="table-view-cell table-view-cell">Messages reçus</li>
 
-            <!-- {{#contacts_data}} -->
+            {{#data}}
             <li class="table-view-cell">
-                Message 1 de Jean-Eudes
+                {{data}}
             </li>
-            <!-- {{#/contacts_data}} -->
+            {{#data}}
 
-        </ul>
+        </ul> -->
 
+<!-- 
+        <script type="text/x-mustache-template" id="liste-message"> <ul>
+            {{ #liste}}
+            <li> {{value}} </li>
+            {{ /liste }} </ul>
+        </script>
 
+ -->
 
         
         <script  type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
@@ -52,5 +61,6 @@
         <script  type="text/javascript" src="cordova.js"></script>
         <script  type="text/javascript" src="js/index.js"></script>
         <script  type="text/javascript" src="js/spin.js"></script>
+        <script  type="text/javascript" src="js/mustache.js"></script>
     </body>
 </html>

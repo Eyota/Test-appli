@@ -63,7 +63,6 @@ var onSuccess = function (position) {
 
     //$('#spinner').after(spinner.stop().el);
 
-    //google.maps.event.addDomListener(window, 'load', getMap(Latitude, Longitude));
 
 }
 
@@ -126,33 +125,6 @@ function getMap(latitude, longitude) {
     alert("carte créée");
 
 }
-
-
-// Get map by using coordinates
-
-// function getMap() {
-
-//     var mapOptions = {
-//         center: new google.maps.LatLng(tmp_storage.getItem("Latitude"), tmp_storage.getItem("Longitude")),
-//         zoom: 1,
-//         mapTypeId: google.maps.MapTypeId.ROADMAP
-//     };
-
-//     var map = new google.maps.Map
-//     (document.getElementById("map_canvas"), mapOptions);
-
-
-//     var latLong = new google.maps.LatLng(tmp_storage.getItem("Latitude"), tmp_storage.getItem("Longitude"));
-
-//     var marker = new google.maps.Marker({
-//         position: latLong
-//     });
-
-//     marker.setMap(map);
-//     map.setZoom(15);
-//     map.setCenter(marker.getPosition());
-
-// }
 
 // Success callback for watching your changing position
 
