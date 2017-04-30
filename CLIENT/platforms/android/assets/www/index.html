@@ -1,33 +1,8 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
 -->
 <html>
     <head>
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
         <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;"> -->
 <!-- 
         <meta http-equiv="Content-Security-Policy" content="
@@ -53,13 +28,13 @@
     </head>
     <body>
 
-        <div id="spinner" class="spinner"></div>
+        
 
         <header class="bar bar-nav">
-            <a id ="return" class="icon icon-left-nav pull-left"></a>
+            <!-- <a id ="return" class="icon icon-left-nav pull-left"></a> -->
             <a id ="getMsg" class="icon icon-refresh pull-right"></a>
-            <a id ="getContact" class="icon icon-person pull-right"></a>
-            <a id ="getMap" class="icon icon-home pull-right"></a>
+            <!-- <a id ="getContact" class="icon icon-person pull-right"></a>
+            <a id ="getMap" class="icon icon-home pull-right"></a>-->
             <h1 class="title">AppliGator</h1>
 
         </header>
@@ -67,6 +42,8 @@
 
         <div class="content">
             <div class="content-padded">
+
+                <div id="spinner" class="spinner"></div>
 
                 
 
@@ -107,17 +84,41 @@
  -->
                 <div id="dynamicListe"></div>
 
-                Ce message sera envoyé à tous les contacts possédant l'application dans un périmètre de 1 km.
-                <form id="form">
-                    Message:<input type='text' id='msg' name='msg'/>
-                <!-- <input type="submit" id="createMsg" value = "Envoyer"/> -->
-                <button  action="submit" id="createMsg" class="btn btn-block btn-outlined">
-                   Envoyer
-                </button >
 
-
+                    <p>Ce message sera envoyé à tous les contacts possédant l'application dans un périmètre de 1 km.</p>
+                    <form id="form">
+                        Message:<input type='text' id='msg' name='msg'/>
+                    <!-- <input type="submit" id="createMsg" value = "Envoyer"/> -->
+                    <button  action="submit" id="createMsg" class="btn btn-block btn-outlined">
+                       Envoyer
+                    </button >
+                
             </div>
         </div>
+
+        <section style="position: fixed; bottom: 0px; width: 100%;">
+            <div class="bar-tab">
+            <a id="return" class="tab-item active">
+                <span class="icon icon-home"></span>
+                <span class="tab-label">Home</span>
+              </a>
+              <a id ="getContact" class="tab-item">
+                <span class="icon icon-person"></span>
+                <span class="tab-label">Contacts</span>
+              </a>
+              <a id ="getMap" class="tab-item">
+                <span class="icon icon-star-filled"></span>
+                <span class="tab-label">Localisation</span>
+              </a>
+          </div>
+        </section>
+
+
+            
+
+
+
+        
 
 
 

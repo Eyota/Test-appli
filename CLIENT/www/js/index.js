@@ -163,13 +163,13 @@ var app = {
             /// dans la page sendMessage.html
             $('#createMsg').click( function (res) {
 
-                alert("ici");
+                //alert("ici");
 
-                alert('2)latitude:'+ tmp_storage.getItem("Latitude") + '\n'+ 'longitude:' + tmp_storage.getItem("Longitude"));
+                alert('latitude:'+ tmp_storage.getItem("Latitude") + '\n'+ 'longitude:' + tmp_storage.getItem("Longitude"));
                 var $this = $(this);
 
                 var mesg = $('#msg').val();
-                alert(mesg);
+                //alert(mesg);
 
 
                 console.log("Envoi d'un message");
@@ -221,20 +221,26 @@ var app = {
                     navigator.notification.beep(1);
                     alert('Message reçu');
                     console.log(data);
-                    console.log(data.data[0].contenu);
-                    console.log(data.length);
+                    //console.log(data.data[0].contenu);
+                    console.log(data.data.length);
 
-                    //tmp_storage.setItem("Msg",data);
 
                     //var template = $("#liste-message").html();
-                    var template = "<ul> {{ #liste}} <li> {{contenu}} </li> {{ /liste }} </ul>";
+                    var template = "<ul> {{ #liste}} <li> {{emetteur}}: {{contenu}} </li> {{ /liste }} </ul>";
+                    var template2 = "<li><a class='fonction' href='#' data-name='{{ emetteur }}'>{{ contenu }}</a></li>";
+                    var template3 = "<ul class='table-view'><li class='table-view-cell table-view-cell'>Messages reçus</li>{{#data}}<li class='table-view-cell'>{{emetteur}}: {{contenu}}</li>{{#data}}</ul>"
+
                     $('#dynamicListe').html(
+                        // Mustache.render(
+                        //     template,
+                        //     {liste: [
+                        //     {contenu: data.data[0].contenu},
+                        //     {contenu: data.data[1].contenu}
+                        //     ]}
+                        // )
                         Mustache.render(
                             template,
-                            {liste: [
-                            {contenu: data.data[0].contenu},
-                            {contenu: data.data[1].contenu}
-                            ]}
+                            {liste: data.data}
                         )
 
                     );

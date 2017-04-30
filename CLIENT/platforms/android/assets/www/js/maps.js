@@ -122,8 +122,6 @@ function getMap(latitude, longitude) {
     marker.setMap(map);
     map.setZoom(15);
     map.setCenter(marker.getPosition());
-    alert("carte créée");
-
 }
 
 // Success callback for watching your changing position
