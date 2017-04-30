@@ -1,70 +1,3 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-
-
-
-
-
-
-// var express = require('express');
-// var path = require('path');
-// var db = require('./db/request.js')
-// var exp = express(); // creation du serveur
-// var mustacheExpress = require('mustache-express');
-// var session = require('express-session')
-
-// var server = require('http').createServer(exp);
-// var bodyParser = require('body-parser')  // envoie des paramètres en POST
-// var io = require('socket.io')(server);
-
-// var contact_router = require('./routes/contacts_ctrl');
-// var contact_services = require('./services/contacts');
-
-// exp.set('views', path.join( 'public/views'));
-// exp.engine('mustache', mustacheExpress());
-// exp.set('view engine', 'mustache');
-
-
-// exp.use('/api/', contact_router);
-
-// io.on('connect', function (socket){
-//     console.log("Start connection");
-//     contact_services.applicationOn(socket)
-
-//     socket.on('disconnect', function(){
-//         console.log("Stop animation")
-//         contact_services.applicationOff(socket)
-//     })
-// })
-
-//var mustache = require ('mustache');
-// var express = require('express');
-// var path = require('path');
-// var exp = express(); // creation du serveur
-// var mustacheExpress = require('mustache-express');
-// var session = require('express-session')
-
-// app.set('views', path.join( '../views'));
-// app.engine('mustache', mustacheExpress());
-// app.set('view engine', 'mustache');
-
-
 var app = {
     // Application Constructor
     initialize: function() {
@@ -99,6 +32,41 @@ var app = {
     	// socket.on('localisation', function(socket) {
     	// 	socket.emit('myLoc', 'This is my pos');
     	// })
+        function spinnerInit() {
+            var opts = {
+              lines: 13 // The number of lines to draw
+            , length: 28 // The length of each line
+            , width: 14 // The line thickness
+            , radius: 42 // The radius of the inner circle
+            , scale: 1 // Scales overall size of the spinner
+            , corners: 1 // Corner roundness (0..1)
+            , color: '#000' // #rgb or #rrggbb or array of colors
+            , opacity: 0.25 // Opacity of the lines
+            , rotate: 0 // The rotation offset
+            , direction: 1 // 1: clockwise, -1: counterclockwise
+            , speed: 1 // Rounds per second
+            , trail: 60 // Afterglow percentage
+            , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+            , zIndex: 2e9 // The z-index (defaults to 2000000000)
+            , className: 'spinner' // The CSS class to assign to the spinner
+            , top: '50%' // Top position relative to parent
+            , left: '50%' // Left position relative to parent
+            , shadow: false // Whether to render a shadow
+            , hwaccel: false // Whether to use hardware acceleration
+            , position: 'absolute' // Element positioning
+            }
+            
+            var spinner = new Spinner(opts);
+            return spinner;
+            
+        }
+
+        var spinner = spinnerInit();
+
+
+        var Longitude = undefined;
+        var Latitude = undefined;
+
 
         //mémoire locale: conservée après fermeture
         var storage = window.localStorage;
@@ -106,8 +74,14 @@ var app = {
         //mémoire perdue après chaque redémarrage
         var tmp_storage = window.sessionStorage;
 
-        ////////// A l'OUVERTURE  DE L'APPLICATION
+
+
+
+//---------- A l'OUVERTURE  DE L'APPLICATION
         if (tmp_storage.getItem("nbrContacts") == null){
+
+            $('#spinner').after(spinner.spin().el);
+
             // réaliser une seule fois à l'ouverture de l'application
             //-->envoi des contacts du telephone au serveur
 
@@ -121,10 +95,24 @@ var app = {
             var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
 
             navigator.contacts.find(fields, onSuccess, onError, options);
+
+        }
+        else{
+            console.log("Contacts déjà enregistrées");
         }
 
 
-        //////////GESTION DES TOUCHES
+        if (tmp_storage.getItem("Longitude")==undefined && tmp_storage.getItem("Latitude")==undefined){
+            
+            getLocation();
+        }
+        else{
+            console.log("Données de géolocalisation déjà enregistrées");
+        }
+
+
+
+//--------------GESTION DES TOUCHES
 
         $(document).bind("volumeupbutton", callbackFunction)
         $(document).bind("backbutton", onBackKeyDown)
@@ -141,32 +129,13 @@ var app = {
 
 
 
-        //////////GESTION DES BOUTONS
+//--------------GESTION DES BOUTONS
         $('#return').click( function (res) {
             window.location = "index.html";
         });
 
 
         $('#sendMsg').click(function(){
-
-            // var options = new ContactFindOptions();
-            // options.filter="Appligator";
-            // //options.hasPhoneNumber=true;
-            // //options.multiple=true;
-            // var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-
-
-            // navigator.contacts.find(fields, success, onError, options);
-            
-            // function success(contacts){
-            //     console.log('Found ' + contacts.length + ' contacts.');
-            //     if (contacts.length == 0){
-            //         navigator.notification.prompt(
-            //             'Veuillez entrer votre numéro de téléphone (en 06)', saveLocal, "Téléphone", ['Ok','Exit'], '0612345678');
-            //     }
-            // }
-
-            //alert(storage.getItem("UserPhoneNumber"));
 
             if (storage.getItem('UserPhoneNumber') == null){
                 navigator.notification.prompt(
@@ -188,42 +157,28 @@ var app = {
                 console.log("Ce numéro est" + storage.getItem("UserPhoneNumber"));
                 window.location = "sendMessage.html";
             }
-            
-            // function createContact(results){
-            //     alert("création contact");
-            //     var AppligatorContact = navigator.contacts.create({"displayName": "Appligator"});
-            //     var name = new ContactName();
-            //     name.givenName = 'Appligator';
-
-            //     AppligatorContact.name = name;
-
-            //     var phonenumber = [];
-            //     phonenumber[0]= new ContactField('mobile', results.input1, true);
-                
-            //     AppligatorContact.phoneNumbers = phonenumber;
-
-            //     AppligatorContact.save(onSuccessCallback, onErrorCallback);
-
-            //     function onSuccessCallback(contact){
-            //         alert('Contact enregistré');
-            //     }
-            //     function onErrorCallback(contact){
-            //         alert('Contact NON enregistré');
-            //     }
-            
-
-            //window.location = "sendMessage.html";
-
         });
 
-        $('#getMsg').click(function(){
-            $.get("http://vps255789.ovh.net:8080/api/user/contact/'0641953523'", '',test, "html");
-            //window.location = "receivedMessages.html";
-            navigator.notification.beep(1);
 
-            function test(data){
-                console.log(data);
-            }
+        $('#getMsg').click(function(){
+
+            console.log(storage.getItem("UserPhoneNumber"));
+
+            $.ajax({
+                type : "GET",
+                url : 'http://vps255789.ovh.net:8080/api/msg/' + storage.getItem("UserPhoneNumber"),
+                dataType : "json",
+                //contentType : 'application/x-www-form-urlencoded',
+                success : function() {
+                    navigator.notification.beep(1);
+                    alert('Message reçu');
+                    window.location = "receivedMessages.html";
+                },
+                error : function() {
+                    alert("Aucun message reçu.");
+                }
+            });
+
         });
 
 
@@ -257,8 +212,9 @@ var app = {
         });
 
         $('#updateContacts').click(function(){
+            alert("updatecontacts");
             navigator.contacts.find(fields, onSuccess, onError, options);
-            window.location = "getMap.html";
+            window.location = "listContacts.html";
         });
 
 
@@ -274,37 +230,56 @@ var app = {
             
             tmp_storage.setItem("nbrContacts", contacts.length);
 
+            $('#spinner').after(spinner.stop().el);
             // for (var i = 0; i < contacts.length; i++) {
             //     alert("Formatted: "  + contacts[i].name.formatted       + "\n" +
             //         "Family Name: "  + contacts[i].name.familyName      + "\n" +
             //         "Given Name: "   + contacts[i].name.givenName);
             // }
-            for (var i = 0; i < contacts.length; i++) {
-                // $.ajax({
-                //     type : "POST",
-                //     url : 'http://vps255789.ovh.net:8080/api/user/contacts/',
-                //     dataType : "json",
-                //     //contentType : 'application/x-www-form-urlencoded',
-                //     data: {
-                //         NOM_COMPLET: JSON.stringify(contacts[i].name.formatted),
-                //         PRENOM: JSON.stringify(contacts[i].name.givenName),
-                //         NUM: JSON.stringify(contacts[i].name.phoneNumbers)
-                //     },
-                //     success : function() {
-                //         alert('Contacts du téléphone correctement transféré au serveur');
-                //     },
-                //     error : function() {
-                //         alert("Les contacts du téléphone n'ont pas pu être transféré au serveur");
-                //     }
-                // });
 
-            }
+            // for (var i = 0; i < contacts.length; i++) {
+            //     $.ajax({
+            //         type : "POST",
+            //         url : 'http://vps255789.ovh.net:8080/api/user/contacts/',
+            //         dataType : "json",
+            //         //contentType : 'application/x-www-form-urlencoded',
+            //         data: {
+            //             NOM_COMPLET: JSON.stringify(contacts[i].name.formatted),
+            //             PRENOM: JSON.stringify(contacts[i].name.givenName),
+            //             NUM: JSON.stringify(contacts[i].name.phoneNumbers)
+            //         },
+            //         success : function() {
+            //             alert('Contacts du téléphone correctement transféré au serveur');
+            //         },
+            //         error : function() {
+            //             alert("Les contacts du téléphone n'ont pas pu être transféré au serveur");
+            //         }
+            //     });
+
+            // }
+
+            $.ajax({
+                    type : "POST",
+                    url : 'http://vps255789.ovh.net:8080/api/user/contacts/',
+                    dataType : "json",
+                    //contentType : 'application/x-www-form-urlencoded',
+                    data: {
+                        contacts: JSON.stringify(contacts)
+                    },
+                    success : function() {
+                        alert('Contacts du téléphone correctement transféré au serveur');
+                    },
+                    error : function() {
+                        alert("Les contacts du téléphone n'ont pas pu être transféré au serveur");
+                    }
+                });
 
             window.location = "index.html";
         };
 
         function onError(contactError) {
             alert('onError!');
+            $('#spinner').after(spinner.stop().el);
         };
 
 

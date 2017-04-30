@@ -1,5 +1,6 @@
-var Latitude = undefined;
-var Longitude = undefined;
+var tmp_storage = window.sessionStorage;
+var Latitude = tmp_storage.getItem("Latitude");
+var Longitude = tmp_storage.getItem("Longitude");
 
 // // Get geo coordinates
 
@@ -34,18 +35,24 @@ $('#createMsg').click( function (res) {
 
 	alert("ici");
 
-	var onSuccess = function(position) {
-        alert('Latitude: '          + position.coords.latitude          + '\n' +
-              'Longitude: '         + position.coords.longitude)
-    }
+	// navigator.geolocation.getCurrentPosition
+ //    (onSuccess, onError, { enableHighAccuracy: true });
 
-    function onError(error) {
-	    alert('code: ' + error.code + '\n' +
-	        'message: ' + error.message + '\n');
-	}
+	// var onSuccess = function(position) {
 
-	navigator.geolocation.getCurrentPosition
-    (onSuccess, onError, { enableHighAccuracy: true });
+	// 	Latitude = position.coords.latitude;
+	// 	Longitude = position.coords.longitude;
+
+ //        alert('Latitude: '          + position.coords.latitude          + '\n' +
+ //              'Longitude: '         + position.coords.longitude)
+ //    }
+
+ //    function onError(error) {
+	//     alert('code: ' + error.code + '\n' +
+	//         'message: ' + error.message + '\n');
+	// }
+
+	
 
 	alert('2)latitude:'+ Latitude + '\n'+ 'longitude:' + Longitude);
 

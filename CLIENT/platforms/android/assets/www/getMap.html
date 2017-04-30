@@ -28,6 +28,7 @@
         <title>Ma localisation</title>
     </head>
     <body>
+        <div id="spinner" class="spinner"></div>
 
         <header class="bar bar-nav">
             <a id ="return" class="icon icon-left-nav pull-left"></a>
@@ -36,17 +37,17 @@
 
         <div id="map_canvas"></div>
 
+        <script  type="text/javascript" src="js/spin.js"></script>
         <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
         <script type="text/javascript">
-
-        getMapLocation();
-
+            getMapLocation();
         </script>
                 
         <script  type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
         <script  type="text/javascript" src="js/ratchet.js"></script>
         <script  type="text/javascript" src="cordova.js"></script>
         <script  type="text/javascript" src="js/index.js"></script>
+        
 
     </body>
 </html>
