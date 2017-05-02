@@ -67,41 +67,29 @@ var app = {
 
 
 //---------- A l'OUVERTURE  DE L'APPLICATION
-	if (storage.getItem('UserPhoneNumber') == null){
-	navigator.notification.prompt(
-	    'Bienvenue ! Veuillez entrer votre numéro de téléphone (en 06)',
-	    saveLocal,
-	    "Téléphone",
-	    ['Ok','Exit'],
-	    '0612345678'
-	    );
-	}
-	else{
-	console.log("Numéro de téléphone de l'utilisateur déjà enregistré");
-	}
 
-	function saveLocal(results){
-	console.log("Enregistrement en local du numéro de télphone de l'utilisateur");
-	storage.setItem("UserPhoneNumber", results.input1);
-	console.log("Ce numéro est" + storage.getItem("UserPhoneNumber"));
-	}
+        ///envoi user phone number
+    	if (storage.getItem('UserPhoneNumber') == null){
+    	navigator.notification.prompt(
+    	    'Bienvenue ! Veuillez entrer votre numéro de téléphone (en 06)',
+    	    saveLocal,
+    	    "Téléphone",
+    	    ['Ok','Exit'],
+    	    '0612345678'
+    	    );
+    	}
+    	else{
+    	console.log("Numéro de téléphone de l'utilisateur déjà enregistré");
+    	}
 
-	socket.on('connected', function(message){
-		socket.emit('login', window.localStorage.getItem('UserPhoneNumber'))
-	})
-
-	socket.on('message', function(message){
-		alert(message)
-	})
-
-	socket.on('localisation', function(message){
-		alert(message)
-		socket.send('loc', 	{latitude : window.tmp_storage.getItem("Latitude"),
-					longitude : window.tmp_storage.getItem("Longitude") })
-	})
+    	function saveLocal(results){
+    	console.log("Enregistrement en local du numéro de télphone de l'utilisateur");
+    	storage.setItem("UserPhoneNumber", results.input1);
+    	console.log("Ce numéro est" + storage.getItem("UserPhoneNumber"));
+    	}
 
 
-
+        /// recolte des contacts du telephone
         if (tmp_storage.getItem("nbrContacts") == null){
 
             $('#spinner').after(spinner.spin().el);
@@ -126,35 +114,72 @@ var app = {
         }
 
 
+
+        // récupération localisation
+
+
         if (tmp_storage.getItem("Longitude")==undefined && tmp_storage.getItem("Latitude")==undefined){
             $('#spinner').after(spinner.spin().el);
             getLocation();
+
+            $.ajax({
+                type : "PUT",
+                url : 'http://vps255789.ovh.net:8080/api/user/position/' + storage.getItem("UserPhoneNumber"),
+                dataType : "json",
+                //contentType : 'application/x-www-form-urlencoded',
+                data: {
+                    num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
+                    latitude: JSON.stringify(window.tmp_storage.getItem("Latitude")),
+                    longitude: JSON.stringify(window.tmp_storage.getItem("Longitude")),
+                    },
+                success : function() {
+                    alert('Localisation bien envoyé');
+
+                },
+                error : function(data) {
+                    console.log(data.latitude);
+
+                    // function onConfirm(buttonIndex) {
+                    //     alert('You selected button ' + buttonIndex);
+                    // }
+
+                    // navigator.notification.confirm(
+                    //     "le message n'a pas pu être envoyé! Souhaitez-vous réessayer?", // message
+                    //      onConfirm,            // callback to invoke with index of button pressed
+                    //     'Message non envoyé',           // title
+                    //     ['Oui','Non']     // buttonLabels
+                    // );
+                    alert("Localisation n'a pas pu être envoyé.");
+                }
+            });
+
             $('#spinner').after(spinner.stop().el);
         }
         else{
             console.log("Données de géolocalisation déjà enregistrées");
         }
 
-        if (storage.getItem('UserPhoneNumber') == null){
-            navigator.notification.prompt(
-                'Veuillez entrer votre numéro de téléphone (en 06)',
-                saveLocal,
-                "Téléphone",
-                ['Ok','Exit'],
-                '0612345678'
-                );
-        }
-        else{
-            console.log("Numéro de téléphone de l'utilisateur déjà enregistré");
-            //window.location = "index.html";
-        }
 
-        function saveLocal(results){
-            console.log("Enregistrement en local du numéro de télphone de l'utilisateur");
-            storage.setItem("UserPhoneNumber", results.input1);
-            console.log("Ce numéro est" + storage.getItem("UserPhoneNumber"));
-            //window.location = "index.html";
-        }
+
+
+
+
+    //----------SOCKET
+    	socket.on('connected', function(message){
+    		socket.emit('login', window.localStorage.getItem('UserPhoneNumber'))
+    	})
+
+    	socket.on('message', function(message){
+    		alert(message)
+    	})
+
+    	socket.on('localisation', function(message){
+    		alert(message)
+    		socket.send('loc', 	{latitude : window.tmp_storage.getItem("Latitude"),
+    					longitude : window.tmp_storage.getItem("Longitude") })
+    	})
+
+   
 
 
 
@@ -184,50 +209,45 @@ var app = {
         });
 
 
-            /// dans la page sendMessage.html
-            $('#createMsg').click( function (res) {
+        $('#createMsg').click( function (res) {
 
-                //alert("ici");
+            alert('latitude:'+ tmp_storage.getItem("Latitude") + '\n'+ 'longitude:' + tmp_storage.getItem("Longitude"));
+            var $this = $(this);
 
-                alert('latitude:'+ tmp_storage.getItem("Latitude") + '\n'+ 'longitude:' + tmp_storage.getItem("Longitude"));
-                var $this = $(this);
+            var mesg = $('#msg').val();
 
-                var mesg = $('#msg').val();
-                //alert(mesg);
+            console.log("Envoi d'un message");
 
-
-                console.log("Envoi d'un message");
-
-                $.ajax({
-                    type : "POST",
-                    url : 'http://vps255789.ovh.net:8080/api/msg/',
-                    dataType : "json",
-                    //contentType : 'application/x-www-form-urlencoded',
-                    data: {contenu: JSON.stringify(mesg),
-                        num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
-                        latitude: JSON.stringify(window.tmp_storage.getItem("Latitude")),
-                        longitude: JSON.stringify(window.tmp_storage.getItem("Longitude")),
-                        },
-                    success : function() {
-                        alert('Message bien envoyé');
+            $.ajax({
+                type : "POST",
+                url : 'http://vps255789.ovh.net:8080/api/msg/',
+                dataType : "json",
+                //contentType : 'application/x-www-form-urlencoded',
+                data: {contenu: JSON.stringify(mesg),
+                    num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
+                    latitude: JSON.stringify(window.tmp_storage.getItem("Latitude")),
+                    longitude: JSON.stringify(window.tmp_storage.getItem("Longitude")),
                     },
-                    error : function(data, socket) {
-                        console.log(data.latitude);
-			                     socket.emit('event', "I sent a message !")
-                        // function onConfirm(buttonIndex) {
-                        //     alert('You selected button ' + buttonIndex);
-                        // }
+                success : function() {
+                    alert('Message bien envoyé');
+                },
+                error : function(data) {
+                    console.log(data.latitude);
+                    socket.emit('event', "I sent a message !")
+                    // function onConfirm(buttonIndex) {
+                    //     alert('You selected button ' + buttonIndex);
+                    // }
 
-                        // navigator.notification.confirm(
-                        //     "le message n'a pas pu être envoyé! Souhaitez-vous réessayer?", // message
-                        //      onConfirm,            // callback to invoke with index of button pressed
-                        //     'Message non envoyé',           // title
-                        //     ['Oui','Non']     // buttonLabels
-                        // );
-                        alert("Le message n'a pas pu être envoyé.");
-                    }
-                });
+                    // navigator.notification.confirm(
+                    //     "le message n'a pas pu être envoyé! Souhaitez-vous réessayer?", // message
+                    //      onConfirm,            // callback to invoke with index of button pressed
+                    //     'Message non envoyé',           // title
+                    //     ['Oui','Non']     // buttonLabels
+                    // );
+                    alert("Le message n'a pas pu être envoyé.");
+                }
             });
+        });
 
 
 
