@@ -138,11 +138,33 @@ var app = {
 
 
         if (tmp_storage.getItem("Longitude")==undefined && tmp_storage.getItem("Latitude")==undefined){
-
+            $('#spinner').after(spinner.spin().el);
             getLocation();
+            $('#spinner').after(spinner.stop().el);
         }
         else{
             console.log("Données de géolocalisation déjà enregistrées");
+        }
+
+        if (storage.getItem('UserPhoneNumber') == null){
+            navigator.notification.prompt(
+                'Veuillez entrer votre numéro de téléphone (en 06)',
+                saveLocal,
+                "Téléphone",
+                ['Ok','Exit'],
+                '0612345678'
+                );
+        }
+        else{
+            console.log("Numéro de téléphone de l'utilisateur déjà enregistré");
+            //window.location = "index.html";
+        }
+
+        function saveLocal(results){
+            console.log("Enregistrement en local du numéro de télphone de l'utilisateur");
+            storage.setItem("UserPhoneNumber", results.input1);
+            console.log("Ce numéro est" + storage.getItem("UserPhoneNumber"));
+            //window.location = "index.html";
         }
 
 
@@ -168,30 +190,8 @@ var app = {
         $('#return').click( function (res) {
             window.location = "index.html";
         });
-
-
-        $('#sendMsg').click(function(){
-
-            if (storage.getItem('UserPhoneNumber') == null){
-                navigator.notification.prompt(
-                    'Veuillez entrer votre numéro de téléphone (en 06)',
-                    saveLocal,
-                    "Téléphone",
-                    ['Ok','Exit'],
-                    '0612345678'
-                    );
-            }
-            else{
-                console.log("Numéro de téléphone de l'utilisateur déjà enregistré");
-                window.location = "index.html";
-            }
-
-            function saveLocal(results){
-                console.log("Enregistrement en local du numéro de télphone de l'utilisateur");
-                storage.setItem("UserPhoneNumber", results.input1);
-                console.log("Ce numéro est" + storage.getItem("UserPhoneNumber"));
-                window.location = "index.html";
-            }
+        $('#backHome').click( function (res) {
+            window.location = "index.html";
         });
 
 
@@ -405,7 +405,7 @@ var app = {
             if (erreur !=0){
                 function onConfirm(buttonIndex) {
                     alert('You selected button ' + buttonIndex);
-                    window.location = "index.html";
+                    //window.location = "index.html";
                 }
 
 
