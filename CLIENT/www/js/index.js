@@ -16,7 +16,7 @@ var app = {
 
         // TOTALITE CODE DE L'APPLICATION
 
-        //var socket = io.connect();
+        var socket = io.connect("http://vps255789.ovh.net:8080");
 
         //var mustache = require ('mustache');
         // var express = require('express');
@@ -55,10 +55,10 @@ var app = {
             , hwaccel: false // Whether to use hardware acceleration
             , position: 'absolute' // Element positioning
             }
-            
+
             var spinner = new Spinner(opts);
             return spinner;
-            
+
         }
 
         var spinner = spinnerInit();
@@ -78,6 +78,41 @@ var app = {
 
 
 //---------- A l'OUVERTURE  DE L'APPLICATION
+	if (storage.getItem('UserPhoneNumber') == null){
+	navigator.notification.prompt(
+	    'Bienvenue ! Veuillez entrer votre numéro de téléphone (en 06)',
+	    saveLocal,
+	    "Téléphone",
+	    ['Ok','Exit'],
+	    '0612345678'
+	    );
+	}
+	else{
+	console.log("Numéro de téléphone de l'utilisateur déjà enregistré");
+	}
+
+	function saveLocal(results){
+	console.log("Enregistrement en local du numéro de télphone de l'utilisateur");
+	storage.setItem("UserPhoneNumber", results.input1);
+	console.log("Ce numéro est" + storage.getItem("UserPhoneNumber"));
+	}
+
+	socket.on('connected', function(message){
+		socket.emit('login', window.localStorage.getItem('UserPhoneNumber'))
+	})
+
+	socket.on('message', function(message){
+		alert(message)
+    socket.emit('event', "Should print something")
+	})
+	socket.on('localisation', function(message){
+		alert(message)
+		socket.send('loc', 	{latitude : window.tmp_storage.getItem("Latitude"),
+					longitude : window.tmp_storage.getItem("Longitude") })
+	})
+
+
+
         if (tmp_storage.getItem("nbrContacts") == null){
 
             $('#spinner').after(spinner.spin().el);
@@ -91,7 +126,7 @@ var app = {
             options.hasPhoneNumber=true;
             options.multiple=true;
             options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
-            
+
             var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
 
             navigator.contacts.find(fields, onSuccess, onError, options);
@@ -103,7 +138,7 @@ var app = {
 
 
         if (tmp_storage.getItem("Longitude")==undefined && tmp_storage.getItem("Latitude")==undefined){
-            
+
             getLocation();
         }
         else{
@@ -187,9 +222,9 @@ var app = {
                     success : function() {
                         alert('Message bien envoyé');
                     },
-                    error : function(data) {
+                    error : function(data, socket) {
                         console.log(data.latitude);
-
+			                     socket.emit('event', "I sent a message !")
                         // function onConfirm(buttonIndex) {
                         //     alert('You selected button ' + buttonIndex);
                         // }
@@ -219,7 +254,7 @@ var app = {
                 //contentType : 'application/x-www-form-urlencoded',
                 success : function(data) {
                     navigator.notification.beep(1);
-                    alert('Message reçu');
+                    //alert('Message reçu');
                     console.log(data);
                     //console.log(data.data[0].contenu);
                     console.log(data.data.length);
@@ -250,7 +285,7 @@ var app = {
                     // var html = Mustache.render(template, data.data[0]);
                     // $('#dynamicListe').html(html);
 
-                    
+
                 },
                 error : function() {
                     alert("Aucun message reçu.");
@@ -258,7 +293,7 @@ var app = {
                 //window.location = "receivedMessages.html";
             });
 
-            
+
 
         });
 
@@ -275,7 +310,7 @@ var app = {
             //var fields = ["displayName", "name"];
             //var fields = ["phoneNumbers"];
 
-    
+
             //navigator.contacts.find(fields, onSuccess, onError, options);
 
             // exp.get('/contacts', function (req, res) {
@@ -299,7 +334,7 @@ var app = {
             options.hasPhoneNumber=true;
             options.multiple=true;
             options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
-            
+
             var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
 
             navigator.contacts.find(fields, onSuccess, onError, options);
@@ -316,7 +351,7 @@ var app = {
 
         function onSuccess(contacts) {
             console.log('Found ' + contacts.length + ' contacts.');
-            
+
             tmp_storage.setItem("nbrContacts", contacts.length);
 
             //$('#spinner').after(spinner.stop().el);
@@ -372,7 +407,7 @@ var app = {
                     alert('You selected button ' + buttonIndex);
                     window.location = "index.html";
                 }
-                
+
 
                 navigator.notification.confirm(
                     erreur + " contacts n'ont pas pu être envoyé! Souhaitez-vous réessayer?", // message
@@ -407,7 +442,9 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-    }
+    },
+
+
 };
 
 app.initialize();
