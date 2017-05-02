@@ -18,17 +18,6 @@ var app = {
 
         var socket = io.connect("http://vps255789.ovh.net:8080");
 
-        //var mustache = require ('mustache');
-        // var express = require('express');
-        // var path = require('path');
-        // var exp = express(); // creation du serveur
-        // var mustacheExpress = require('mustache-express');
-        // var session = require('express-session')
-
-        // app.set('views', path.join( '../views'));
-        // app.engine('mustache', mustacheExpress());
-        // app.set('view engine', 'mustache');
-
     	// socket.on('localisation', function(socket) {
     	// 	socket.emit('myLoc', 'This is my pos');
     	// })
@@ -103,8 +92,8 @@ var app = {
 
 	socket.on('message', function(message){
 		alert(message)
-    socket.emit('event', "Should print something")
 	})
+
 	socket.on('localisation', function(message){
 		alert(message)
 		socket.send('loc', 	{latitude : window.tmp_storage.getItem("Latitude"),
@@ -138,11 +127,7 @@ var app = {
 
 
         if (tmp_storage.getItem("Longitude")==undefined && tmp_storage.getItem("Latitude")==undefined){
-<<<<<<< HEAD
-
-=======
             $('#spinner').after(spinner.spin().el);
->>>>>>> aac43e572897d1e8fafa7d30460219362913b0c4
             getLocation();
             $('#spinner').after(spinner.stop().el);
         }
@@ -196,31 +181,6 @@ var app = {
         });
         $('#backHome').click( function (res) {
             window.location = "index.html";
-        });
-
-
-        $('#sendMsg').click(function(){
-
-            if (storage.getItem('UserPhoneNumber') == null){
-                navigator.notification.prompt(
-                    'Veuillez entrer votre numéro de téléphone (en 06)',
-                    saveLocal,
-                    "Téléphone",
-                    ['Ok','Exit'],
-                    '0612345678'
-                    );
-            }
-            else{
-                console.log("Numéro de téléphone de l'utilisateur déjà enregistré");
-                //window.location = "index.html";
-            }
-
-            function saveLocal(results){
-                console.log("Enregistrement en local du numéro de télphone de l'utilisateur");
-                storage.setItem("UserPhoneNumber", results.input1);
-                console.log("Ce numéro est" + storage.getItem("UserPhoneNumber"));
-                //window.location = "index.html";
-            }
         });
 
 

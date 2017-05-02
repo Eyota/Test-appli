@@ -18,17 +18,6 @@ var app = {
 
         var socket = io.connect("http://vps255789.ovh.net:8080");
 
-        //var mustache = require ('mustache');
-        // var express = require('express');
-        // var path = require('path');
-        // var exp = express(); // creation du serveur
-        // var mustacheExpress = require('mustache-express');
-        // var session = require('express-session')
-
-        // app.set('views', path.join( '../views'));
-        // app.engine('mustache', mustacheExpress());
-        // app.set('view engine', 'mustache');
-
     	// socket.on('localisation', function(socket) {
     	// 	socket.emit('myLoc', 'This is my pos');
     	// })
@@ -103,8 +92,8 @@ var app = {
 
 	socket.on('message', function(message){
 		alert(message)
-    socket.emit('event', "Should print something")
 	})
+
 	socket.on('localisation', function(message){
 		alert(message)
 		socket.send('loc', 	{latitude : window.tmp_storage.getItem("Latitude"),
