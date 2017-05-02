@@ -133,6 +133,9 @@ var app = {
         $('#return').click( function (res) {
             window.location = "index.html";
         });
+        $('#backHome').click( function (res) {
+            window.location = "index.html";
+        });
 
 
         $('#sendMsg').click(function(){
