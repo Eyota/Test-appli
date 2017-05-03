@@ -28,17 +28,20 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"> -->
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <!-- Ajout perso -->
         <link  href="css/ratchet.css" rel="stylesheet">
         <link  href="css/ratchet-theme-android.css" rel="stylesheet">
         <!-- Ajout perso end -->
 
-        
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script type="text/javascript" src="js/mustache.js">
+        </script>
+
         <title>Liste des contacts</title>
     </head>
     <body>
@@ -51,28 +54,50 @@
             <h1 class="title">Liste des Contacts</h1>
         </header>
 
+        <div class="content">
+            <div class="content-padded">
 
-        <!-- <ul class="table-view">
-          
-          <li class="table-view-cell table-view-cell">Liste contacts</li>
 
-          {{#contacts_data}}
-          <li class="table-view-cell">
+                <div id="dynamicContact"></div>
 
-          </li>
-          {{#/contacts_data}}
-        </ul>
+                <script  type="text/javascript" src="js/listcontacts.js"></script>
+                <script type="text/javascript">
+                    var tmp_storage = window.sessionStorage;
+                    console.log("nombre phone numb depuis list contact" + tmp_storage.getItem("nbrContacts"));
 
-                
-        <form method="GET" action="">
-          <SELECT name="sousdom_nom">
-            {{#subdomains}}
-            <OPTION> {{sousdom_nom}} </OPTION>
-            {{/subdomains}}
-          </SELECT>
-          <input type="submit" value="Sélectionnez" />
-        </form>
- -->
+
+                    function GetContacts(){
+                        console.log("je suis ici!! :D bis");
+
+                        var template4 = "<ul class='table-view'>  {{ #liste}}  <li class='table-view-cell media'>    <div class='media-body'> {{idcontact}} </div> </li>  {{ /liste }} </ul>"
+                        
+                        if (tmp_storage.getItem("nbrContactsBD")==undefined){
+                            alert("Erreur chargement des contacts");
+                        }
+                        else{
+                            var data = [];
+                            for (var i =0; i< tmp_storage.getItem("nbrContactsBD"); i++){
+                                data[i] = {idcontact: tmp_storage.getItem("Contacts" + i)};
+                            }
+                            console.log(data);
+
+                            $('#dynamicContact').html(
+                                Mustache.render(
+                                    template4,
+                                    {liste: data}
+                                )
+                            );
+                        }
+                    }
+
+                    GetContacts();
+                </script>
+
+            </div>
+
+        </div>
+
+
         <section style="position: fixed; bottom: 0px; width: 100%;">
             <div class="bar-tab">
             <a id="backHome" class="tab-item">
@@ -96,8 +121,12 @@
         <script  type="text/javascript" src="cordova.js"></script>
         <script  type="text/javascript" src="js/index.js"></script>
         <script  type="text/javascript" src="js/spin.js"></script>
-	<script  type="text/javascript" src="http://vps255789.ovh.net:8080/socket.io/socket.io.js"></script >
-        <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3YemqQauu35EEFjSH2FRqWxssBAgOssQ"></script>
-    -->
+        <script type="text/javascript" src="js/maps.js">
+        </script>
+
+
+        
+        <script  type="text/javascript" src="http://vps255789.ovh.net:8080/socket.io/socket.io.js"></script >
+
     </body>
 </html>

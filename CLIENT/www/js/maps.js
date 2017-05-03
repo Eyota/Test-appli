@@ -115,13 +115,35 @@ function getMap(latitude, longitude) {
 
     var latLong = new google.maps.LatLng(latitude, longitude);
 
-    var marker = new google.maps.Marker({
+    var markerU = new google.maps.Marker({
         position: latLong
     });
 
-    marker.setMap(map);
-    map.setZoom(15);
-    map.setCenter(marker.getPosition());
+    markerU.setMap(map);
+
+    console.log(tmp_storage.getItem("nbrContactsBDloc"));
+    if(tmp_storage.getItem("nbrContactsBDloc")!= undefined){
+
+        var latLong = [];
+        var marker = [];
+        console.log("ajout de marqueurs");
+
+        for (var i = 0; i < tmp_storage.getItem("nbrContactsBDloc"); i++){
+            latLong[i] = new google.maps.LatLng(tmp_storage.getItem("ContactsLat"+i), tmp_storage.getItem("ContactsLong"+i));
+            marker[i] = new google.maps.Marker({position: latLong[i]});
+            marker[i].setMap(map);
+        }
+        latLong[0] = new google.maps.LatLng(tmp_storage.getItem("ContactsLat0"), tmp_storage.getItem("ContactsLong0"));
+        marker[0] = new google.maps.Marker({position: latLong[0]});
+        marker[0].setMap(map);
+    }
+    else{
+        console.log("nbrContactsBDloc undefined");
+    }
+
+    
+    map.setZoom(10);
+    map.setCenter(markerU.getPosition());
 }
 
 // Success callback for watching your changing position

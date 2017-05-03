@@ -78,13 +78,21 @@ var app = {
 
         ///envoi user phone number
     	if (storage.getItem('UserPhoneNumber') == null){
-        	navigator.notification.prompt(
-        	    'Bienvenue ! Veuillez entrer votre numéro de téléphone (en 06)',
-        	    saveLocal,
-        	    "Téléphone",
-        	    ['Ok','Exit'],
-        	    '0612345678'
-        	    );
+        	
+            navigator.notification.prompt(
+                'Et votre pseudo...',
+                saveLocalpseudo,
+                "Pseudi",
+                ['Ok','Exit']
+                );
+
+            navigator.notification.prompt(
+                'Bienvenue ! Veuillez entrer votre numéro de téléphone (en 06)',
+                saveLocal,
+                "Téléphone",
+                ['Ok','Exit'],
+                '0612345678'
+                );
     	}
     	else{
     	   console.log("Numéro de téléphone de l'utilisateur déjà enregistré");
@@ -95,6 +103,11 @@ var app = {
     	   storage.setItem("UserPhoneNumber", results.input1);
     	   console.log("Ce numéro est " + storage.getItem("UserPhoneNumber"));
     	}
+        function saveLocalpseudo(results){
+           console.log("Enregistrement en local du pseudo de l'utilisateur");
+           storage.setItem("Pseudo", results.input1);
+           console.log("Ce pseudo est " + storage.getItem("Pseudo"));
+        }
 
 
         /// recolte des contacts du telephone
@@ -133,37 +146,7 @@ var app = {
             getLocation();
 
             if (serveur_on == true){
-
-                $.ajax({
-                    type : "PUT",
-                    url : 'http://vps255789.ovh.net:8080/api/user/position/' + storage.getItem("UserPhoneNumber"),
-                    dataType : "json",
-                    //contentType : 'application/x-www-form-urlencoded',
-                    data: {
-                        num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
-                        latitude: JSON.stringify(window.tmp_storage.getItem("Latitude")),
-                        longitude: JSON.stringify(window.tmp_storage.getItem("Longitude")),
-                        },
-                    success : function() {
-                        //alert('Localisation bien envoyée');
-
-                    },
-                    error : function(data) {
-                        console.log(data.latitude);
-
-                        // function onConfirm(buttonIndex) {
-                        //     alert('You selected button ' + buttonIndex);
-                        // }
-
-                        // navigator.notification.confirm(
-                        //     "le message n'a pas pu être envoyé! Souhaitez-vous réessayer?", // message
-                        //      onConfirm,            // callback to invoke with index of button pressed
-                        //     'Message non envoyé',           // title
-                        //     ['Oui','Non']     // buttonLabels
-                        // );
-                        //alert("Localisation n'a pas pu être envoyée.");
-                    }
-                });
+                ajaxPutLocalisation();
             }
 
             $('#spinner').after(spinner.stop().el);
@@ -193,26 +176,7 @@ var app = {
                 //alert(message)
                 getLocation();
                 //alert('socket localisation')
-                $.ajax({
-                    type : "PUT",
-                    url : 'http://vps255789.ovh.net:8080/api/user/position/' + storage.getItem("UserPhoneNumber"),
-                    dataType : "json",
-                    //contentType : 'application/x-www-form-urlencoded',
-                    data: {
-                        num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
-                        latitude: JSON.stringify(window.tmp_storage.getItem('Latitude')),
-                        longitude: JSON.stringify(window.tmp_storage.getItem('Longitude')),
-                        },
-                    success : function(data) {
-                        //alert('success'+data.latitude);
-                    },
-                    error : function(data) {
-                        alert('error'+JSON.stringify(data.latitude));
-                    }
-                });
-                //
-                // socket.send('loc',   {latitude : window.tmp_storage.getItem("Latitude"),
-                //          longitude : window.tmp_storage.getItem("Longitude") })
+                ajaxPutLocalisation();
             })
 
             socket.on('getMessage', function(){
@@ -222,19 +186,46 @@ var app = {
     	
 
 //--------------GESTION DES REQUETES AJAX
+
+        function ajaxPutLocalisation(){
+            console.log("ajaxPutLocalisation");
+
+            $.ajax({
+                type : "PUT",
+                url : 'http://vps255789.ovh.net:8080/api/user/position/' + storage.getItem("UserPhoneNumber"),
+                dataType : "json",
+                //contentType : 'application/x-www-form-urlencoded',
+                data: {
+                    num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
+                    latitude: JSON.stringify(window.tmp_storage.getItem('Latitude')),
+                    longitude: JSON.stringify(window.tmp_storage.getItem('Longitude')),
+                    },
+                success : function(data) {
+                    console.log('success'+data.latitude);
+                },
+                error : function(data) {
+                    console.log('error'+JSON.stringify(data.latitude));
+                }
+            });
+
+        }
+
+        
+
         function ajaxGetMessage(){
+            console.log("ajaxGetMessage");
 
           $.ajax({
               type : "GET",
               url : 'http://vps255789.ovh.net:8080/api/msg/' + storage.getItem("UserPhoneNumber"),
               dataType : "json",
-              //contentType : 'application/x-www-form-urlencoded',
               success : function(data) {
                   navigator.notification.beep(1);
                   //alert('Message reçu');
                   console.log(data);
                   //console.log(data.data[0].contenu);
                   console.log(data.data.length);
+                  console.log("Success: Récupération des messages");
 
 
                   //var template = $("#liste-message").html();
@@ -242,31 +233,129 @@ var app = {
                   var template2 = "<li><a class='fonction' href='#' data-name='{{ emetteur }}'>{{ contenu }}</a></li>";
                   var template3 = "<ul class='table-view'><li class='table-view-cell table-view-cell'>Messages reçus</li>{{#data}}<li class='table-view-cell'>{{emetteur}}: {{contenu}}</li>{{#data}}</ul>"
                   var template4 = "<ul class='table-view'>  {{ #liste}}  <li class='table-view-cell media'>    <div class='media-body'> {{emetteur}}<p>{{ contenu }}</p> </div> </li>  {{ /liste }} </ul>"
-        //   <ul class="table-view">
-        //   <li class="table-view-cell media">
-        //       <div class="media-body">
-        //         {{emetteur}}
-        //         <p>{{ contenu }}</p>
-        //       </div>
-        //   </li>
-        // </ul>
+
                   $('#dynamicListe').html(
-                      // Mustache.render(
-                      //     template,
-                      //     {liste: [
-                      //     {contenu: data.data[0].contenu},
-                      //     {contenu: data.data[1].contenu}
-                      //     ]}
-                      // )
+
                       Mustache.render(
                           template4,
                           {liste: data.data}
                       )
 
                   );
+                },
+                error : function(data){
+                    console.log(data);
+                    console.log("Erreur: Récupération messages");
                 }
               });
         }
+
+        function ajaxGetContacts(){
+            console.log("debut ajaxGetContacts");
+
+          $.ajax({
+              type : "GET",
+              url : 'http://vps255789.ovh.net:8080/api/user/contact/' + storage.getItem("UserPhoneNumber"),
+              dataType : "json",
+              //contentType : 'application/x-www-form-urlencoded',
+              success : function(data) {
+                  navigator.notification.beep(1);
+
+                  console.log("Success: Récupération des contacts");
+                  //alert('Message reçu');
+                  console.log(data[0]);
+                  //console.log(data.data[0].contenu);
+                  console.log(data.length);
+
+                  tmp_storage.setItem("nbrContactsBD",data.length);
+
+
+                  for (var i = 0; i < data.length; i++){
+                    tmp_storage.setItem("Contacts" + i, data[i].idcontact);
+                    console.log(tmp_storage.getItem("Contacts" + i));
+                  }
+                  
+
+                  //window.location = "listContacts.html";
+
+
+                  // //var template = $("#liste-message").html();
+                  // var template = "<ul> {{ #liste}} <li> {{emetteur}}: {{contenu}} </li> {{ /liste }} </ul>";
+                  // var template2 = "<li><a class='fonction' href='#' data-name='{{ emetteur }}'>{{ contenu }}</a></li>";
+                  // var template3 = "<ul class='table-view'><li class='table-view-cell table-view-cell'>Messages reçus</li>{{#data}}<li class='table-view-cell'>{{emetteur}}: {{contenu}}</li>{{#data}}</ul>"
+                  // var template4 = "<ul class='table-view'>  {{ #liste}}  <li class='table-view-cell media'>    <div class='media-body'> {{emetteur}}<p>{{ contenu }}</p> </div> </li>  {{ /liste }} </ul>"
+
+
+                  // // var template = "<ul class='table-view'>
+                  // // <li class='table-view-divider'>Contacts utilisant l'application</li>
+                  // // {{ #liste}}
+                  // // <li class='table-view-cell'> {{contact}} </li>
+                  // // <li class='table-view-cell table-view-cell'>Item 2</li>
+                  // // <li class='table-view-cell'>Item 3</li>
+                  // // {{ /liste }}
+                  // // </ul>"
+                  // // $('#dynamicContact').html(
+                  // //     // Mustache.render(
+                  // //     //     template,
+                  // //     //     {liste: [
+                  // //     //     {contenu: data.data[0].contenu},
+                  // //     //     {contenu: data.data[1].contenu}
+                  // //     //     ]}
+                  // //     // )
+                  // //     Mustache.render(
+                  // //         template4,
+                  // //         {liste: data.data}
+                  // //     )
+
+                  // // );
+                },
+                error: function(data){
+                    console.log(data);
+                    console.log("Erreur: Récupération contacts");
+                }
+              });
+        }
+
+
+        function ajaxGetContactsPosition(){
+            console.log("debut ajaxGetContactsPosition");
+
+          $.ajax({
+              type : "GET",
+              url : 'http://vps255789.ovh.net:8080/api/user/contact/position/' + storage.getItem("UserPhoneNumber"),
+              dataType : "json",
+              //contentType : 'application/x-www-form-urlencoded',
+              success : function(data) {
+                  navigator.notification.beep(1);
+
+                  console.log("Success: localisation des contacts");
+                  //alert('Message reçu');
+                  console.log(data);
+                  //console.log(data.data[0].contenu);
+
+                  console.log(data.length);
+                  console.log(data.data.length);
+
+                  tmp_storage.setItem("nbrContactsBDloc",data.data.length);
+                  
+
+                  for (var i = 0; i < data.length; i++){
+                    tmp_storage.setItem("ContactsLat" + i, data.data[i].latitude);
+                    tmp_storage.setItem("ContactsLon" + i, data.data[i].longitude);
+                    console.log(tmp_storage.getItem("ContactsLat" + i));
+                    console.log(tmp_storage.getItem("ContactsLon" + i));
+                  }
+
+                },
+                error: function(data){
+                    console.log(data);
+                    console.log("Erreur: localisation des contacts");
+
+                }
+            });
+        }
+
+
 
 //--------------GESTION DES TOUCHES
 
@@ -298,43 +387,36 @@ var app = {
 
             $('#spinner').after(spinner.spin().el);
 
-            //alert('latitude:'+ tmp_storage.getItem("Latitude") + '\n'+ 'longitude:' + tmp_storage.getItem("Longitude"));
             var $this = $(this);
 
             var mesg = $('#msg').val();
 
             console.log("Envoi d'un message");
 
-            $.ajax({
-                type : "POST",
-                url : 'http://vps255789.ovh.net:8080/api/msg/',
-                dataType : "json",
-                //contentType : 'application/x-www-form-urlencoded',
-                data: {contenu: JSON.stringify(mesg),
-                    num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
-                    latitude: JSON.stringify(window.tmp_storage.getItem("Latitude")),
-                    longitude: JSON.stringify(window.tmp_storage.getItem("Longitude")),
+            if (serveur_on == true){
+                $.ajax({
+                    type : "POST",
+                    url : 'http://vps255789.ovh.net:8080/api/msg/',
+                    dataType : "json",
+                    //contentType : 'application/x-www-form-urlencoded',
+                    data: {contenu: JSON.stringify(mesg),
+                        num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
+                        pseudo : JSON.stringify(window.localStorage.getItem('Pseudo')),
+                        latitude: JSON.stringify(window.tmp_storage.getItem("Latitude")),
+                        longitude: JSON.stringify(window.tmp_storage.getItem("Longitude")),
+                        },
+                    success : function() {
+                        console.log('Message bien envoyé');
                     },
-                success : function() {
-                    //alert('Message bien envoyé');
-                },
-                error : function(data) {
-                    console.log(data.latitude);
-                    socket.emit('event', "I sent a message !")
-                    // function onConfirm(buttonIndex) {
-                    //     alert('You selected button ' + buttonIndex);
-                    // }
+                    error : function(data) {
+                        console.log(data.latitude);
+                        console.log(window.tmp_storage.getItem("Longitude"));
+                        console.log("erreur dans envoi message");
+                        socket.emit('event', "I sent a message !")
+                    }
+                });
+            }
 
-                    // navigator.notification.confirm(
-                    //     "le message n'a pas pu être envoyé! Souhaitez-vous réessayer?", // message
-                    //      onConfirm,            // callback to invoke with index of button pressed
-                    //     'Message non envoyé',           // title
-                    //     ['Oui','Non']     // buttonLabels
-                    // );
-                    //alert("Le message n'a pas pu être envoyé.");
-                }
-            });
-            
             $('#spinner').after(spinner.stop().el);
         });
 
@@ -356,32 +438,22 @@ var app = {
 
         $('#getContact').click(function(){
 
-            $('#spinner').after(spinner.spin().el);
-
-            var options = new ContactFindOptions();
-            //options.filter="Mathurin";
-
-            options.hasPhoneNumber=true;
-            options.multiple=true;
-            options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
-            var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-            //var fields = ["displayName", "name"];
-            //var fields = ["phoneNumbers"];
-
-
-            //navigator.contacts.find(fields, onSuccess, onError, options);
-
-            // exp.get('/contacts', function (req, res) {
-            //     res.render('list_contacts', {contacts_data: contacts});
-            // });
-            $('#spinner').after(spinner.stop().el);
-            window.location = "listContacts.html";
-
+            if (serveur_on == true){
+                ajaxGetContacts();
+            }
+            if (tmp_storage.getItem("nbrContactsBD") != undefined){
+                window.location = "listContacts.html";
+            }
 
         });
 
         $('#getMap').click(function(){
-            window.location = "getMap.html";
+            if (serveur_on == true){
+                ajaxGetContactsPosition();
+            }
+            if (tmp_storage.getItem("nbrContactsBDloc") != undefined){
+                window.location = "getMap.html";
+            }
 
         });
 
@@ -442,7 +514,6 @@ var app = {
 
             for (var i = 0; i < contacts.length; i++) {
                 if (serveur_on == true){
-
                     $.ajax({
                         type : "POST",
                         url : 'http://vps255789.ovh.net:8080/api/user/contact/',
