@@ -110,7 +110,7 @@ var app = {
 
         }
         else{
-            console.log("Contacts déjà enregistrées");
+            console.log("Contacts déjà enregistrés");
         }
 
 
@@ -133,7 +133,7 @@ var app = {
                     longitude: JSON.stringify(window.tmp_storage.getItem("Longitude")),
                     },
                 success : function() {
-                    alert('Localisation bien envoyé');
+                    //alert('Localisation bien envoyée');
 
                 },
                 error : function(data) {
@@ -149,7 +149,7 @@ var app = {
                     //     'Message non envoyé',           // title
                     //     ['Oui','Non']     // buttonLabels
                     // );
-                    alert("Localisation n'a pas pu être envoyé.");
+                    alert("Localisation n'a pas pu être envoyée.");
                 }
             });
 
@@ -169,19 +169,85 @@ var app = {
     		socket.emit('login', window.localStorage.getItem('UserPhoneNumber'))
     	})
 
-    	socket.on('message', function(message){
-    		alert(message)
-    	})
+    	// socket.on('message', function(message){
+    	// 	//alert(message)
+    	// })
 
     	socket.on('localisation', function(message){
-    		alert(message)
-    		socket.send('loc', 	{latitude : window.tmp_storage.getItem("Latitude"),
-    					longitude : window.tmp_storage.getItem("Longitude") })
+    		//alert(message)
+        getLocation();
+        //alert('socket localisation')
+        $.ajax({
+            type : "PUT",
+            url : 'http://vps255789.ovh.net:8080/api/user/position/' + storage.getItem("UserPhoneNumber"),
+            dataType : "json",
+            //contentType : 'application/x-www-form-urlencoded',
+            data: {
+                num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
+                latitude: JSON.stringify(window.tmp_storage.getItem('Latitude')),
+                longitude: JSON.stringify(window.tmp_storage.getItem('Longitude')),
+                },
+            success : function(data) {
+                //alert('success'+data.latitude);
+            },
+            error : function(data) {
+                alert('error'+JSON.stringify(data.latitude));
+            }
+        });
+        //
+    		// socket.send('loc', 	{latitude : window.tmp_storage.getItem("Latitude"),
+    		// 			longitude : window.tmp_storage.getItem("Longitude") })
     	})
 
-   
+      socket.on('getMessage', function(){
+        ajaxGetMessage();
+      })
+
+//--------------GESTION DES REQUETES AJAX
+function ajaxGetMessage(){
+  $.ajax({
+      type : "GET",
+      url : 'http://vps255789.ovh.net:8080/api/msg/' + storage.getItem("UserPhoneNumber"),
+      dataType : "json",
+      //contentType : 'application/x-www-form-urlencoded',
+      success : function(data) {
+          navigator.notification.beep(1);
+          //alert('Message reçu');
+          console.log(data);
+          //console.log(data.data[0].contenu);
+          console.log(data.data.length);
 
 
+          //var template = $("#liste-message").html();
+          var template = "<ul> {{ #liste}} <li> {{emetteur}}: {{contenu}} </li> {{ /liste }} </ul>";
+          var template2 = "<li><a class='fonction' href='#' data-name='{{ emetteur }}'>{{ contenu }}</a></li>";
+          var template3 = "<ul class='table-view'><li class='table-view-cell table-view-cell'>Messages reçus</li>{{#data}}<li class='table-view-cell'>{{emetteur}}: {{contenu}}</li>{{#data}}</ul>"
+          var template4 = "<ul class='table-view'>  {{ #liste}}  <li class='table-view-cell media'>    <div class='media-body'> {{emetteur}}<p>{{ contenu }}</p> </div> </li>  {{ /liste }} </ul>"
+//   <ul class="table-view">
+//   <li class="table-view-cell media">
+//       <div class="media-body">
+//         {{emetteur}}
+//         <p>{{ contenu }}</p>
+//       </div>
+//   </li>
+// </ul>
+          $('#dynamicListe').html(
+              // Mustache.render(
+              //     template,
+              //     {liste: [
+              //     {contenu: data.data[0].contenu},
+              //     {contenu: data.data[1].contenu}
+              //     ]}
+              // )
+              Mustache.render(
+                  template4,
+                  {liste: data.data}
+              )
+
+          );
+        }
+      });
+}
 
 //--------------GESTION DES TOUCHES
 
@@ -211,7 +277,7 @@ var app = {
 
         $('#createMsg').click( function (res) {
 
-            alert('latitude:'+ tmp_storage.getItem("Latitude") + '\n'+ 'longitude:' + tmp_storage.getItem("Longitude"));
+            //alert('latitude:'+ tmp_storage.getItem("Latitude") + '\n'+ 'longitude:' + tmp_storage.getItem("Longitude"));
             var $this = $(this);
 
             var mesg = $('#msg').val();
@@ -229,7 +295,7 @@ var app = {
                     longitude: JSON.stringify(window.tmp_storage.getItem("Longitude")),
                     },
                 success : function() {
-                    alert('Message bien envoyé');
+                    //alert('Message bien envoyé');
                 },
                 error : function(data) {
                     console.log(data.latitude);
@@ -244,7 +310,7 @@ var app = {
                     //     'Message non envoyé',           // title
                     //     ['Oui','Non']     // buttonLabels
                     // );
-                    alert("Le message n'a pas pu être envoyé.");
+                    //alert("Le message n'a pas pu être envoyé.");
                 }
             });
         });
@@ -255,52 +321,7 @@ var app = {
         $('#getMsg').click(function(){
 
             console.log(storage.getItem("UserPhoneNumber"));
-
-            $.ajax({
-                type : "GET",
-                url : 'http://vps255789.ovh.net:8080/api/msg/' + storage.getItem("UserPhoneNumber"),
-                dataType : "json",
-                //contentType : 'application/x-www-form-urlencoded',
-                success : function(data) {
-                    navigator.notification.beep(1);
-                    //alert('Message reçu');
-                    console.log(data);
-                    //console.log(data.data[0].contenu);
-                    console.log(data.data.length);
-
-
-                    //var template = $("#liste-message").html();
-                    var template = "<ul> {{ #liste}} <li> {{emetteur}}: {{contenu}} </li> {{ /liste }} </ul>";
-                    var template2 = "<li><a class='fonction' href='#' data-name='{{ emetteur }}'>{{ contenu }}</a></li>";
-                    var template3 = "<ul class='table-view'><li class='table-view-cell table-view-cell'>Messages reçus</li>{{#data}}<li class='table-view-cell'>{{emetteur}}: {{contenu}}</li>{{#data}}</ul>"
-
-                    $('#dynamicListe').html(
-                        // Mustache.render(
-                        //     template,
-                        //     {liste: [
-                        //     {contenu: data.data[0].contenu},
-                        //     {contenu: data.data[1].contenu}
-                        //     ]}
-                        // )
-                        Mustache.render(
-                            template,
-                            {liste: data.data}
-                        )
-
-                    );
-
-                    // var template = "{{contenu}} {{emetteur}}";
-                    // //var html = Mustache.to_html(template, data.data[0]);
-                    // var html = Mustache.render(template, data.data[0]);
-                    // $('#dynamicListe').html(html);
-
-
-                },
-                error : function() {
-                    alert("Aucun message reçu.");
-                }
-                //window.location = "receivedMessages.html";
-            });
+            ajaxGetMessage();
 
 
 
@@ -413,7 +434,7 @@ var app = {
             }
             if (erreur !=0){
                 function onConfirm(buttonIndex) {
-                    alert('You selected button ' + buttonIndex);
+                    //alert('You selected button ' + buttonIndex);
                     //window.location = "index.html";
                 }
 
@@ -431,7 +452,7 @@ var app = {
         };
 
         function onError(contactError) {
-            alert('onError!');
+            //alert('onError!');
             $('#spinner').after(spinner.stop().el);
         };
 
