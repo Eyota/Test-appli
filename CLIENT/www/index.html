@@ -31,10 +31,8 @@
 
 
         <header class="bar bar-nav">
-            <!-- <a id ="return" class="icon icon-left-nav pull-left"></a> -->
+
             <a id ="getMsg" class="icon icon-refresh pull-right"></a>
-            <!-- <a id ="getContact" class="icon icon-person pull-right"></a>
-            <a id ="getMap" class="icon icon-home pull-right"></a>-->
             <h1 class="title">AppliGator</h1>
 
         </header>
@@ -49,52 +47,17 @@
                 <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
                 <script  type="text/javascript" src="js/maps.js"></script>
                 <script  type="text/javascript" src="js/spin.js"></script>
-                <script type="text/javascript">
 
-                    //getLocation();
 
-                </script>
-
-<!--
-                <button  id="sendMsg" class="btn btn-block btn-outlined">
-                    <span  class="icon  icon-compose"></span>
-                   Ecrire un message
-                    <img id="myImage"/>
-                </button >
-
-                <button  id="getMsg" class="btn btn-block btn-outlined">
-                    <span  class="icon  icon-refresh"></span>
-                   Messages reçus
-                    <span class="badge badge-primary">1</span>
-                    <img id="myImage"/>
-                </button >
-
-                <button  id="getContact" class="btn btn-block btn-outlined">
-                    <span  class="icon  icon-person"></span>
-                   Liste des contacts
-                    <img id="myImage"/>
-                </button >
-
-                <button  id="getMap" class="btn btn-block btn-outlined">
-                    <span  class="icon  icon-home"></span>
-                   Ma localisation
-                    <img id="myImage"/>
-                </button >
-
- -->
                 <div id="dynamicListe"></div>
 
 
-                    <!--<p>Ce message sera envoyé à tous les contacts possédant l'application dans un périmètre de 1 km.</p>-->
-                    <!-- <section style="position: fixed; bottom: 50px; padding-bottom: 200px;"> -->
+                <form id="form">
+                    Message:<input type='text' id='msg' name='msg'/>
+                <button  action="submit" id="createMsg" class="btn btn-block btn-outlined">
+                   Envoyer
+                </button >
 
-                        <form id="form">
-                            Message:<input type='text' id='msg' name='msg'/>
-                        <button  action="submit" id="createMsg" class="btn btn-block btn-outlined">
-                           Envoyer
-                        </button >
-
-                    <!-- </section> -->
 
 
 
@@ -121,15 +84,9 @@
                   </a>
               </div>
             </section>
-        
+
         </footer>
         
-
-
-
-
-
-
 
 
 

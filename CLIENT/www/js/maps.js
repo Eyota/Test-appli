@@ -122,13 +122,14 @@ function getMap(latitude, longitude) {
     markerU.setMap(map);
 
     console.log(tmp_storage.getItem("nbrContactsBDloc"));
+
     if(tmp_storage.getItem("nbrContactsBDloc")!= undefined){
 
         var latLong = [];
         var marker = [];
         console.log("ajout de marqueurs");
 
-        for (var i = 0; i < tmp_storage.getItem("nbrContactsBDloc")-1; i++){
+        for (var i = 0; i < tmp_storage.getItem("nbrContactsBDloc"); i++){
             latLong[i] = new google.maps.LatLng(tmp_storage.getItem("ContactsLat"+i), tmp_storage.getItem("ContactsLong"+i));
             marker[i] = new google.maps.Marker({position: latLong[i], map : map});
             marker[i].setMap(map);
@@ -143,21 +144,7 @@ function getMap(latitude, longitude) {
     map.setCenter(markerU.getPosition());
 }
 
-// Success callback for watching your changing position
 
-var onMapWatchSuccess = function (position) {
-
-    var updatedLatitude = position.coords.latitude;
-    var updatedLongitude = position.coords.longitude;
-
-    if (updatedLatitude != Latitude && updatedLongitude != Longitude) {
-
-        Latitude = updatedLatitude;
-        Longitude = updatedLongitude;
-
-        getMap(updatedLatitude, updatedLongitude);
-    }
-}
 
 // Error callback
 
@@ -167,11 +154,3 @@ function onError(error) {
     //getLocation();
 }
 
-// Watch your changing position
-
-function watchMapPosition() {
-    console.log("Ecoute des coordonnées de géolocalisation");
-
-    return navigator.geolocation.watchPosition
-    (onMapWatchSuccess, onMapError, { enableHighAccuracy: true });
-}

@@ -61,13 +61,14 @@
 
                 <script  type="text/javascript" src="js/listcontacts.js"></script>
                 <script type="text/javascript">
+
+                    // pourrait être placé dans un fichier listcontacts.js!
                     var tmp_storage = window.sessionStorage;
 
 
                     function GetContacts(){
-                        console.log("je suis ici!! :D bis");
 
-                        var template4 = "<ul class='table-view'>  {{ #liste}}  <li class='table-view-cell media'>    <div class='media-body'> {{nom}} <p>{{ idcontact }}</p> </div> </li>  {{ /liste }} </ul>"
+                        var template = "<ul class='table-view'>  {{ #liste}}  <li class='table-view-cell media'>    <div class='media-body'> {{nom}} <p>{{ idcontact }}</p> </div> </li>  {{ /liste }} </ul>"
                         
                         if (tmp_storage.getItem("nbrContactsBD")==undefined){
                             alert("Erreur chargement des contacts");
@@ -81,7 +82,7 @@
 
                             $('#dynamicContact').html(
                                 Mustache.render(
-                                    template4,
+                                    template,
                                     {liste: data}
                                 )
                             );
@@ -100,11 +101,11 @@
             <section style="position: fixed; bottom: 0px; width: 100%;">
                 <div class="bar-tab">
 
-                <a id="backHome" class="tab-item active">
+                <a id="backHome" class="tab-item">
                     <span class="icon icon-home"></span>
                     <span class="tab-label">Home</span>
                   </a>
-                  <a id ="getContact" class="tab-item">
+                  <a id ="getContact" class="tab-item active">
                     <span class="icon icon-person"></span>
                     <span class="tab-label">Contacts</span>
                   </a>
