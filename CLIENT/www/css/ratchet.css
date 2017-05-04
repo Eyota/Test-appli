@@ -17,6 +17,7 @@ html {
 
 body {
   margin: 0;
+  margin-bottom: 60px;
 }
 
 article,
@@ -266,6 +267,7 @@ a:active {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   background-color: #fff;
+  margin-bottom: 60px;
 }
 
 .content > * {

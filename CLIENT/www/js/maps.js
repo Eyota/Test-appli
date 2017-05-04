@@ -128,21 +128,18 @@ function getMap(latitude, longitude) {
         var marker = [];
         console.log("ajout de marqueurs");
 
-        for (var i = 0; i < tmp_storage.getItem("nbrContactsBDloc"); i++){
+        for (var i = 0; i < tmp_storage.getItem("nbrContactsBDloc")-1; i++){
             latLong[i] = new google.maps.LatLng(tmp_storage.getItem("ContactsLat"+i), tmp_storage.getItem("ContactsLong"+i));
-            marker[i] = new google.maps.Marker({position: latLong[i]});
+            marker[i] = new google.maps.Marker({position: latLong[i], map : map});
             marker[i].setMap(map);
         }
-        latLong[0] = new google.maps.LatLng(tmp_storage.getItem("ContactsLat0"), tmp_storage.getItem("ContactsLong0"));
-        marker[0] = new google.maps.Marker({position: latLong[0]});
-        marker[0].setMap(map);
     }
     else{
         console.log("nbrContactsBDloc undefined");
     }
 
     
-    map.setZoom(10);
+    map.setZoom(15);
     map.setCenter(markerU.getPosition());
 }
 

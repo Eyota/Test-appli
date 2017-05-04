@@ -50,7 +50,6 @@
 
         <header class="bar bar-nav">
             <a id="return" class="icon icon-left-nav pull-left"></a>
-            <a id="updateContacts" class="icon icon-download pull-right"></a>
             <h1 class="title">Liste des Contacts</h1>
         </header>
 
@@ -63,13 +62,12 @@
                 <script  type="text/javascript" src="js/listcontacts.js"></script>
                 <script type="text/javascript">
                     var tmp_storage = window.sessionStorage;
-                    console.log("nombre phone numb depuis list contact" + tmp_storage.getItem("nbrContacts"));
 
 
                     function GetContacts(){
                         console.log("je suis ici!! :D bis");
 
-                        var template4 = "<ul class='table-view'>  {{ #liste}}  <li class='table-view-cell media'>    <div class='media-body'> {{idcontact}} </div> </li>  {{ /liste }} </ul>"
+                        var template4 = "<ul class='table-view'>  {{ #liste}}  <li class='table-view-cell media'>    <div class='media-body'> {{nom}} <p>{{ idcontact }}</p> </div> </li>  {{ /liste }} </ul>"
                         
                         if (tmp_storage.getItem("nbrContactsBD")==undefined){
                             alert("Erreur chargement des contacts");
@@ -77,7 +75,7 @@
                         else{
                             var data = [];
                             for (var i =0; i< tmp_storage.getItem("nbrContactsBD"); i++){
-                                data[i] = {idcontact: tmp_storage.getItem("Contacts" + i)};
+                                data[i] = {idcontact: tmp_storage.getItem("Contacts" + i + "tel"), nom: tmp_storage.getItem("Contacts" + i)};
                             }
                             console.log(data);
 
@@ -97,23 +95,28 @@
 
         </div>
 
+        <footer>
 
-        <section style="position: fixed; bottom: 0px; width: 100%;">
-            <div class="bar-tab">
-            <a id="backHome" class="tab-item">
-                <span class="icon icon-home"></span>
-                <span class="tab-label">Home</span>
-              </a>
-              <a id ="getContact" class="tab-item active">
-                <span class="icon icon-person"></span>
-                <span class="tab-label">Contacts</span>
-              </a>
-              <a id ="getMap" class="tab-item">
-                <span class="icon icon-star-filled"></span>
-                <span class="tab-label">Localisation</span>
-              </a>
-          </div>
-        </section>
+            <section style="position: fixed; bottom: 0px; width: 100%;">
+                <div class="bar-tab">
+
+                <a id="backHome" class="tab-item active">
+                    <span class="icon icon-home"></span>
+                    <span class="tab-label">Home</span>
+                  </a>
+                  <a id ="getContact" class="tab-item">
+                    <span class="icon icon-person"></span>
+                    <span class="tab-label">Contacts</span>
+                  </a>
+                  <a id ="getMap" class="tab-item">
+                    <span class="icon icon-star-filled"></span>
+                    <span class="tab-label">Localisation</span>
+                  </a>
+              </div>
+            </section>
+        
+        </footer>
+        
 
 
         <script  type="text/javascript" src="js/jquery-3.2.0.min.js"></script>

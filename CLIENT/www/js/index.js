@@ -154,6 +154,10 @@ var app = {
         else{
             console.log("Données de géolocalisation déjà enregistrées");
             console.log("lat=" + tmp_storage.getItem("Latitude")+ "long=" + tmp_storage.getItem("Longitude"));
+            if (serveur_on == true){
+                ajaxPutLocalisation();
+                ajaxGetMessage();
+            }
         }
 
 
@@ -197,6 +201,9 @@ var app = {
                 //contentType : 'application/x-www-form-urlencoded',
                 data: {
                     num: JSON.stringify(window.localStorage.getItem('UserPhoneNumber')),
+                    //Pour téléphone sylvain:
+                    //latitude: "45.187700",
+                    //longitude: "5.731296",
                     latitude: JSON.stringify(window.tmp_storage.getItem('Latitude')),
                     longitude: JSON.stringify(window.tmp_storage.getItem('Longitude')),
                     },
@@ -228,20 +235,32 @@ var app = {
                   console.log("Success: Récupération des messages");
 
 
-                  //var template = $("#liste-message").html();
-                  var template = "<ul> {{ #liste}} <li> {{emetteur}}: {{contenu}} </li> {{ /liste }} </ul>";
-                  var template2 = "<li><a class='fonction' href='#' data-name='{{ emetteur }}'>{{ contenu }}</a></li>";
-                  var template3 = "<ul class='table-view'><li class='table-view-cell table-view-cell'>Messages reçus</li>{{#data}}<li class='table-view-cell'>{{emetteur}}: {{contenu}}</li>{{#data}}</ul>"
-                  var template4 = "<ul class='table-view'>  {{ #liste}}  <li class='table-view-cell media'>    <div class='media-body'> {{emetteur}}<p>{{ contenu }}</p> </div> </li>  {{ /liste }} </ul>"
+                  var template = "<ul class='table-view'>  <li class='table-view-divider'>Messages Recus:</li>{{ #liste}}  <li class='table-view-cell media'>    <div class='media-body'> {{pseudo}}<p>{{ contenu }}</p> </div> </li>  {{ /liste }} </ul>"
 
-                  $('#dynamicListe').html(
+                  var templateNull = "<ul class='table-view'>  <li class='table-view-divider'>Messages Reçus:</li> <li class='table-view-cell media'>  <div class='media-body'> Aucun message reçu </div> </li> </ul>"
+                  
+                  if (data.data.length != 0){
+                      $('#dynamicListe').html(
 
-                      Mustache.render(
-                          template4,
-                          {liste: data.data}
-                      )
+                          Mustache.render(
+                              template,
+                              {liste: data.data}
+                          )
 
-                  );
+                      );
+                    }
+                    else{
+
+                        $('#dynamicListe').html(
+
+                          Mustache.render(
+                              templateNull,
+                              {liste: data.data}
+                          )
+
+                      );
+
+                     }
                 },
                 error : function(data){
                     console.log(data);
@@ -271,8 +290,10 @@ var app = {
 
 
                   for (var i = 0; i < data.length; i++){
-                    tmp_storage.setItem("Contacts" + i, data[i].idcontact);
-                    console.log(tmp_storage.getItem("Contacts" + i));
+
+                    tmp_storage.setItem("Contacts" + i, JSON.stringify(data[i].nom).replace(/"/g, ''));
+                    tmp_storage.setItem("Contacts" + i + "tel", data[i].idcontact);
+                    console.log(tmp_storage.getItem("Contacts" + i) + tmp_storage.getItem("Contacts" + i + "tel"));
                   }
                   
 
@@ -407,6 +428,7 @@ var app = {
                         },
                     success : function() {
                         console.log('Message bien envoyé');
+                        socket.emit('event', "I sent a message !")
                     },
                     error : function(data) {
                         console.log(data.latitude);
@@ -457,19 +479,6 @@ var app = {
 
         });
 
-        $('#updateContacts').click(function(){
-            console.log("updatecontacts");
-            var options = new ContactFindOptions();
-
-            options.hasPhoneNumber=true;
-            options.multiple=true;
-            options.desiredFields = [navigator.contacts.fieldType.phoneNumbers];
-
-            var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
-
-            navigator.contacts.find(fields, onSuccess, onError, options);
-            window.location = "listContacts.html";
-        });
 
 
 
